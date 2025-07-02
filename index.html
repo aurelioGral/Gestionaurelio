@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Aurelio Ski</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+    <div class="navbar-container">
+        <a href="#" class="navbar-brand">Sistema de Reservas</a>
+        <button class="menu-toggle" aria-label="Abrir menú">&#9776;</button>
+        <ul class="nav-links">
+            <li><a href="Index.html" class="active">Formulario</a></li>
+            <li><a href="/html/Clientes.html">Clientes</a></li>
+            <li><a href="/html/Vendedores.html">Vendedores</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Clases &#9662;</a>
+                <div class="dropdown-content">
+                    <a href="/html/clasespriv.html">Clases Privadas</a>
+                    <a href="/html/clasesgrup.html">Clases Grupales</a>
+                </div>
+            </li>
+            <li><a href="/html/Caja.html">Caja</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="contenedorTodo">
+   
+    <div class="container">
+        <h1>Formulario Ingreso de RESERVA</h1>
+
+        <div class="section-top">
+            <div class="form-group">
+                <label for="fecha">FECHA:</label>
+                <input type="text" id="fecha" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nReserva">N° RESERVA:</label>
+                <input type="text" id="nReserva" readonly>
+            </div>
+            <div class="form-group with-button"> <input type="text" id="inputBuscarReserva" placeholder="N° Reserva">
+                <button id="btnBuscarReserva">Buscar Reserva</button>
+            </div>
+
+           <div class="form-group with-button"> <input type="text" id="inputPreReservaId" placeholder="ID Pre-Reserva">
+                <button id="btnBuscarPreReserva">Buscar Pre-Reserva</button>
+            </div>
+            <div class="form-group">
+                <label for="vendedor">VENDEDOR:</label>
+                <select id="vendedor">
+                    <option value="">Seleccione</option>
+                    <option value="VAQUERO">vaquero</option>
+                    <option value="TURBO">turbo</option>
+                    <option value="LUISA">luisa</option>
+                    <option value="DUDU">dudu</option>
+                    <option value="CHELO">chelo</option>
+                    <option value="LUCAS">lucas</option>
+                    <option value="FISU">fisu</option>
+                    <option value="NICO">nico</option>
+                    <option value="NUESTRO">nuestro</option>
+                    <option value="LUCHO">lucho</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reservaPasajeros">Cantidad Pasajeros:</label>
+                <input type="number" id="reservaPasajeros" min="1" max="15" value="1">
+            </div>
+            <div class="form-group">
+                <label for="cantidadDiasAlquiler">Cantidad Días Alquiler:</label>
+                <input type="number" id="cantidadDiasAlquiler" min="1">
+            </div>
+        </div>
+            
+        <hr>
+
+        <div class="section-pasajeros">
+            <h2>Detalle de Pasajeros</h2>
+            <div class="form-group">
+                <label for="nombreCompleto">NOMBRE COMPLETO:</label>
+                <input type="text" id="nombreCompleto">
+            </div>
+            <div class="form-group">
+                <label for="telMail">TEL / E-mail:</label>
+                <input type="text" id="telMail">
+            </div>
+            
+            <div id="pasajerosContainer" class="pasajeros-grid">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="section-bottom">
+            <div class="form-group">
+                <label for="observaciones">OBSERVACIONES:</label>
+                <textarea id="observaciones" rows="3"></textarea>
+            </div>
+        </div> 
+
+        <h2>TOTALES Y PAGO</h2>
+        <div class="total-section">
+            <div class="form-group">
+                <label for="montoTotalAlquiler">Monto Total Alquiler:</label>
+                <input type="text" id="montoTotalAlquiler" value="0.00" readonly>
+            </div>
+            <div class="form-group">
+                <label for="montoTotalClases">Monto Total Clases:</label>
+                <input type="text" id="montoTotalClases" value="0.00" readonly>
+            </div>
+            <div class="form-group">
+                <label for="descuento">Descuento:</label>
+                <input type="number" id="descuento" value="0">
+            </div>
+            <div class="form-group">
+                <label for="montoTotalFinal">Monto Total Final:</label>
+                <input type="text" id="montoTotalFinal" value="0.00" readonly>
+            </div>
+            <div class="form-group">
+                <label for="metodoPagoSelect">Método de Pago:</label>
+                <select id="metodoPagoSelect">
+                    <option value="">Seleccione...</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                    <option value="Tarjeta de Credito">Tarjeta de Crédito</option>
+                    <option value="Tarjeta de Debito">Tarjeta de Débito</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="tipoPagoSelect">Tipo de Pago:</label>
+                <select id="tipoPagoSelect">
+                    <option value="Parcial">Parcial</option>
+                    <option value="Total">Total</option>
+                </select>
+            </div>
+            <div class="form-group" id="montoPagadoGroup">
+                <label for="montoPagadoInput">Monto Pagado:</label>
+                <input type="number" id="montoPagadoInput" value="0">
+            </div>
+            <div class="form-group">
+                <label for="restaPagarInput">Resta Pagar:</label>
+                <input type="text" id="restaPagarInput" value="0.00" readonly>
+            </div>
+            <input type="hidden" id="estadoPreReservaHidden" name="ESTADO" value=""> 
+        </div>
+        <hr>
+        <div class="button-actions">
+            <button id="btnGenerarTicket">Generar Ticket</button>
+            <button id="btnEliminar">Eliminar</button>
+            <button id="btnActualizar">Actualizar</button>
+            <button id="btnLimpiar">Limpiar</button>
+            <button id="btnCargar">Cargar</button>
+        </div>
+
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <p id="modalMessage"></p>
+            </div>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+</div>
+    </div> <div class="form-section">
+            <h2> Pre-reservas</h2>
+            <div class="form-group">
+                <label for="preReservaDateSelect">Seleccionar Fecha de Pre-reserva:</label>
+                <select id="preReservaDateSelect">
+                    <option value="">Cargando fechas...</option>
+                </select>
+            </div>
+
+            <div id="preReservasTableContainer" class="table-container">
+                <p>Seleccione una fecha para ver las pre-reservas.</p>
+            </div>
+        </div>
+</div>
+    <script src="/JS/script.js"></script>
+    <script src="/JS/menuybotones.js"></script>
+</body>
+</html>
