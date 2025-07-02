@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Aurelio Ski - Vendedores</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/vendedores.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">Sistema de Reservas</a>
+            <button class="menu-toggle" aria-label="Abrir menú">&#9776;</button>
+            <ul class="nav-links">
+                <li><a href="../index.html">Formulario</a></li>
+                <li><a href="./Clientes.html">Clientes</a></li>
+                <li><a href="Vendedores.html" class="active">Vendedores</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Clases &#9662;</a>
+                    <div class="dropdown-content">
+                        <a href="clasespriv.html">Clases Privadas</a>
+                        <a href="clasesgrup.html">Clases Grupales</a>
+                    </div>
+                </li>
+                <li><a href="./Caja.html">Caja</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="contenedorTodo">
+        <div class="container">
+            <h1>Gestión de Vendedores</h1>
+
+            <div class="form-section">
+                <h2>Ventas por Vendedor</h2>
+                <div class="form-group">
+                    <label for="fechaVentasSelect">Seleccionar Fecha de Venta:</label>
+                    <select id="fechaVentasSelect">
+                        <option value="">Cargando fechas...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="vendedoresGrid" class="vendedores-grid">
+                <p class="empty-message">Seleccione una fecha para ver las ventas por vendedor.</p>
+            </div>
+        </div>
+
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <p id="modalMessage"></p>
+            </div>
+        </div>
+
+        <div id="commissionCalculatorModal" class="modal">
+            <div class="modal-content calculator-modal">
+                <span class="close-button" id="closeCalculatorModal">&times;</span>
+                <h2>Calcular y Pagar Comisión</h2>
+                <div class="form-group">
+                    <label>Vendedor:</label>
+                    <p id="calcVendorName" class="display-value"></p>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Venta:</label>
+                    <p id="calcSalesDate" class="display-value"></p>
+                </div>
+                <div class="form-group">
+                    <label>Total de Ventas:</label>
+                    <p id="calcTotalSales" class="display-value"></p>
+                </div>
+                <div class="form-group">
+                    <label for="commissionPercentage">Porcentaje de Comisión (%):</label>
+                    <input type="number" id="commissionPercentage" min="0" step="0.01" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Monto de Comisión Calculado:</label>
+                    <p id="calculatedCommissionAmount" class="display-value amount-display"></p>
+                </div>
+                <div class="modal-buttons">
+                    <button id="payCommissionButton" class="commission-button">Pagar Comisión</button>
+                    <button id="cancelCommissionButton" class="cancel-button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Cargando...</p>
+        </div>
+    </div>
+    <script src="../js/menuybotones.js"></script>
+    <script src="../js/vendedores.js"></script>
+</body>
+</html>
