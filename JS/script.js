@@ -24,6 +24,7 @@ const montoTotalFinalInput = document.getElementById('montoTotalFinal');
 const metodoPagoSelect = document.getElementById('metodoPagoSelect'); 
 const tipoPagoSelect = document.getElementById('tipoPagoSelect'); 
 const montoPagadoInput = document.getElementById('montoPagadoInput'); 
+const montoPagadoPreRESERVAInput = document.getElementById('montoPagadoPreRESERVAInput'); 
 const restaPagarInput = document.getElementById('restaPagarInput'); 
 const btnGenerarTicket = document.getElementById('btnGenerarTicket');
 const btnEliminar = document.getElementById('btnEliminar');
@@ -317,6 +318,7 @@ function getFormData() {
         
         // Nuevos campos de pago
         TIPO_DE_PAGO: tipoPagoSelect.value, 
+        MONTO_PAGADO_PRE_RESERVA: parseFloat(montoPagadoPreRESERVAInput.value) || 0,
         MONTO_PAGADO: parseFloat(montoPagadoInput.value), 
         
         RESTA_PAGAR: parseFloat(restaPagarInput.value), 
@@ -400,16 +402,18 @@ function fillForm(data) {
     // Nuevos campos de pago
     tipoPagoSelect.value = data.TIPO_DE_PAGO || 'Parcial'; 
     montoPagadoInput.value = (parseFloat(data.MONTO_PAGADO) || 0).toFixed(2); 
+    montoPagadoPreRESERVAInput.value = (data.MONTO_PAGADO_PRE_RESERVA || 0).toFixed(2);
 
     // *** NUEVO: Llenar el campo oculto con el ESTADO de la pre-reserva ***
     if (estadoPreReservaHidden) {
         // Asume que la propiedad se llama ESTADO en los datos devueltos por getPreReserva o getReservaDefinitiva
         estadoPreReservaHidden.value = data.ESTADO || 'No Cobrado'; 
     }
-    
+  
     // Actualizar el estado del campo Monto Pagado basado en el Tipo de Pago cargado
     if (tipoPagoSelect.value === 'Total') {
-        montoPagadoInput.setAttribute('readonly', true);
+        montoPagadoInput.value = restaPagarInput.value;
+                montoPagadoInput.setAttribute('readonly', true);
         montoPagadoInput.style.backgroundColor = '#f0f0f0';
     } else {
         montoPagadoInput.removeAttribute('readonly');
@@ -439,11 +443,16 @@ function clearForm() {
     metodoPagoSelect.value = '';
     
     // Limpiar nuevos campos de pago
-    if (tipoPagoSelect) tipoPagoSelect.value = 'Parcial'; 
+    if (tipoPagoSelect) tipoPagoSelect.value = ''; 
     if (montoPagadoInput) {
         montoPagadoInput.value = '0';
         montoPagadoInput.removeAttribute('readonly'); 
         montoPagadoInput.style.backgroundColor = '#fcfcfc';
+    }
+     if (montoPagadoPreRESERVAInput) {
+        montoPagadoPreRESERVAInput.value = '0';
+        montoPagadoPreRESERVAInput.removeAttribute('readonly'); 
+        montoPagadoPreRESERVAInput.style.backgroundColor = '#fcfcfc';
     }
     // *** NUEVO: Limpiar el campo oculto de ESTADO ***
     if (estadoPreReservaHidden) {
@@ -490,6 +499,7 @@ function generatePrintableTicket(data) {
     const descuento = parseFloat(data.DESCUENTO) || 0;
     const montoTotalFinal = parseFloat(data.MONTO_TOTAL_FINAL) || 0;
     const montoPagado = parseFloat(data.MONTO_PAGADO) || 0; 
+    const montoPagadoPreRESERVA = parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || 0; 
     const restaPagar = parseFloat(data.RESTA_PAGAR) || 0;
 
     const singleTicketContent = `
@@ -515,6 +525,7 @@ function generatePrintableTicket(data) {
             <p class="flex-row"><span>Método de Pago:</span> <span>${data.METODO_DE_PAGO || '-'}</span></p>
             <p class="flex-row"><span>Tipo de Pago:</span> <span>${data.TIPO_DE_PAGO || '-'}</span></p>
             <p class="flex-row"><span>Monto Pagado:</span> <span>$${montoPagado.toFixed(2)}</span></p>
+            <p class="flex-row"><span>Monto Pagado en Pre Reserva:</span> <span>$${montoPagadoPreRESERVA.toFixed(2)}</span></p>
             <p class="flex-row"><span>Resta Pagar:</span> <span>$${restaPagar.toFixed(2)}</span></p>
             <div class="line"></div>
             <p><strong>Observaciones:</strong> ${data.OBSERVACIONES || '-'}</p>
@@ -772,8 +783,9 @@ document.addEventListener('DOMContentLoaded', () => {
     getNextReservaIdAndPopulate();
 
     const montoTotalFinalVal = parseFloat(montoTotalFinalInput.value) || 0; 
+    const montoPagadoPreRESERVAcuenta = parseFloat(montoPagadoPreRESERVAInput.value)|| 0;
     if (tipoPagoSelect.value === 'Total') {
-        montoPagadoInput.value = montoTotalFinalVal.toFixed(2);
+        montoPagadoInput.value = restaPagarInput.value;
         montoPagadoInput.setAttribute('readonly', true);
         montoPagadoInput.style.backgroundColor = '#f0f0f0';
     } else {
@@ -904,8 +916,9 @@ async function getNextReservaIdAndPopulate() {
 // Listener para el tipo de pago (Total/Parcial)
 tipoPagoSelect.addEventListener('change', () => {
     const montoTotalFinal = parseFloat(montoTotalFinalInput.value) || 0;
+    const montoPagadoPreRESERVA = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
     if (tipoPagoSelect.value === 'Total') {
-        montoPagadoInput.value = montoTotalFinal.toFixed(2);
+        montoPagadoInput.value = montoTotalFinal.toFixed(2) - montoPagadoPreRESERVA.toFixed(2);
         montoPagadoInput.setAttribute('readonly', true); 
         montoPagadoInput.style.backgroundColor = '#f0f0f0';
     } else {
@@ -921,12 +934,21 @@ montoPagadoInput.addEventListener('input', calculateRestaPagar);
 montoTotalAlquilerInput.addEventListener('input', calculateTotals); 
 montoTotalClasesInput.addEventListener('input', calculateTotals);
 descuentoInput.addEventListener('input', calculateTotals);
+if (montoPagadoPreRESERVAInput) {
+    montoPagadoPreRESERVAInput.addEventListener('input', calculateRestaPagar);
+}
 
 
-// Función para recalcular la resta a pagar
+// Esta función ahora debe sumar el MONTO_PAGADO_PRE_RESERVA al MONTO_PAGADO actual.
 function calculateRestaPagar() {
     const montoTotalFinal = parseFloat(montoTotalFinalInput.value) || 0;
-    const montoPagado = parseFloat(montoPagadoInput.value) || 0;
-    const resta = montoTotalFinal - montoPagado;
+    const montoPagadoActual = parseFloat(montoPagadoInput.value) || 0;
+    // **AQUÍ SE AGREGA/MODIFICA:** Obtener el valor del monto pagado en pre-reserva
+    const montoPagadoPreReserva = parseFloat(montoPagadoPreRESERVAInput.value) || 0; 
+    
+    // Suma ambos montos para el total ya pagado
+    const totalPagado = montoPagadoActual + montoPagadoPreReserva; 
+    
+    const resta = montoTotalFinal - totalPagado;
     restaPagarInput.value = resta.toFixed(2);
 }
