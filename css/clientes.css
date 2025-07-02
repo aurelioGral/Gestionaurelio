@@ -1,0 +1,504 @@
+/* General Body & Container - Tomado de tu CSS */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f7; /* Light blue-grey background */
+    margin: 0;
+    padding: 0; /* Remove padding here, container will handle it */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content to top, not center */
+    align-items: center; /* Center horizontally */
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    margin-top: 30px; /* Adjust margin-top to avoid overlapping with fixed navbar */
+    background-color:#fdf0d5;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 95%; /* Adjust width to fit content */
+    max-width: 1400px; /* Wider to accommodate more cards */
+    margin-bottom: 50px;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    color: #003049; /* Darker blue-grey for headings */
+    margin-bottom: 35px;
+    font-size: 2.5em; /* Slightly larger for main title */
+    font-weight: 600;
+}
+
+/* Navbar Styles - Tomado de tu CSS */
+.navbar {
+    width: 100%; /* Full width for the navbar */
+    background-color: #003049; /* Dark background */
+    padding: 10px 0;
+    font-family: Arial, sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adjusted shadow for visibility */
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar-brand {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    position: relative;
+    margin-left: 25px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.nav-links a:hover {
+    background-color: #fdf0d5;
+    color: #003049;
+    border-radius: 12px;
+}
+.nav-links a.active {
+    background-color: #780000;
+    color: #ffd700;
+    border-radius: 12px;
+}
+
+/* Dropdown specific styles */
+.dropdown .dropbtn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.dropdown .dropbtn .arrow {
+    transition: transform 0.3s ease;
+}
+.dropdown:hover .dropbtn .arrow {
+    transform: rotate(180deg);
+}
+
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #780000;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    top: 100%;
+    left: 0;
+    padding: 5px 0;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #fdf0d5;
+    color:#003049 ;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown-content.show-dropdown { /* Added class for JS toggle */
+    display: block;
+}
+
+/* Menu Toggle for mobile (Hamburger icon) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Responsive adjustments for Navbar */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #003049; /* Match main navbar background */
+        border-top: 1px solid #555;
+        padding-bottom: 10px;
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .nav-links li {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+    .nav-links a {
+        padding: 12px 0;
+        border-bottom: 1px solid #444;
+    }
+    .nav-links li:last-child a {
+        border-bottom: none;
+    }
+    .dropdown-content {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        background-color: #444; /* Slightly lighter for submenu */
+        border-radius: 0;
+        padding: 0;
+    }
+    .dropdown-content a {
+        padding-left: 40px;
+        border-bottom: 1px solid #666;
+    }
+}
+
+
+/* --- Dashboard Specific Styles (New/Adapted) --- */
+
+.client-tabs {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tab-button {
+    background-color: #669bbc; /* Azul claro de tu paleta */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    margin: 0 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tab-button:hover {
+    background-color: #003049; /* Azul oscuro al hover */
+    transform: translateY(-2px);
+}
+
+.tab-button.active {
+    background-color: #c1121f; /* Rojo vibrante para el botón activo */
+    box-shadow: 0 0 12px rgba(193, 18, 31, 0.5); /* Sombra más pronunciada para activo */
+    transform: translateY(-2px);
+}
+
+.reservations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* 320px es un buen ancho para las tarjetas */
+    gap: 30px; /* Espacio entre las tarjetas */
+    padding: 20px;
+    background-color: #eef2f7; /* Fondo del grid para destacar las tarjetas */
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Sombra interna sutil */
+}
+
+.reservation-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+    overflow: hidden; /* Para que el borde redondeado funcione con la imagen */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px; /* Espacio al final de la tarjeta */
+}
+
+.reservation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: #e0e0e0; /* Color de fondo del encabezado de la tarjeta */
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.card-header.active-res {
+    background-color: #e6f7f3; /* Fondo suave para reservas activas */
+}
+
+.card-header.finished-res {
+    background-color: #f7e6e6; /* Fondo suave para reservas terminadas (rojo claro) */
+}
+
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #669bbc; /* Borde alrededor de la imagen */
+}
+
+.client-details h3 {
+    margin: 0;
+    color: #003049;
+    font-size: 1.4em;
+    font-weight: 700;
+}
+
+.client-details p {
+    margin: 5px 0 0;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.card-content {
+    padding: 15px 20px;
+    flex-grow: 1; /* Permite que el contenido se expanda */
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-group {
+    margin-bottom: 15px;
+    border-bottom: 1px dashed #eee; /* Separador sutil */
+    padding-bottom: 15px;
+}
+
+.stat-group:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    color: #444;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: #003049;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #c1121f; /* Rojo principal */
+    background-color: #ffe8e8; /* Fondo suave para valores */
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 60px; /* Para alinear visualmente */
+    text-align: center;
+}
+
+/* Indicadores de progreso/estado */
+.progress-bar-container {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+    margin-top: 5px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4CAF50; /* Green for progress */
+    width: 0%; /* Will be set by JS */
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Pax specific details within the card */
+.pax-details-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.pax-details-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #669bbc; /* Azul claro para subtítulos de PAX */
+    font-size: 1.1em;
+    border-bottom: 1px dashed #aed6f1;
+    padding-bottom: 5px;
+}
+
+.pax-item-detail {
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 1px dotted #e0e0e0;
+    font-size: 0.9em;
+}
+
+.pax-item-detail:last-child {
+    border-bottom: none;
+}
+
+.pax-item-detail strong {
+    color: #333;
+}
+
+.pax-days-status {
+    font-weight: bold;
+    color: #003049; /* Azul oscuro para los días */
+    margin-top: 5px;
+    padding: 5px 0;
+    border-top: 1px dotted #eee;
+}
+
+.pax-days-status.finished {
+    color: #c1121f; /* Rojo si el PAX está terminado */
+}
+
+.total-summary-card {
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #003049; /* Línea divisoria robusta */
+    font-size: 1em;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.total-summary-card span {
+    color: #e67e22; /* Naranja para los montos importantes */
+    font-size: 1.1em;
+}
+
+.empty-message {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 50px;
+    font-size: 1.2em;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    grid-column: 1 / -1; /* Para que ocupe todo el ancho del grid */
+}
+.empty-message.error {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+/* Responsive adjustments for the grid */
+@media (max-width: 1200px) {
+    .reservations-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        width: 98%;
+        padding: 20px;
+    }
+    .reservations-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .tab-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    .reservations-grid {
+        grid-template-columns: 1fr; /* Una columna en móviles */
+        padding: 10px;
+    }
+    .reservation-card {
+        padding: 10px;
+    }
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .client-details h3 {
+        font-size: 1.2em;
+    }
+    .profile-pic {
+        width: 50px;
+        height: 50px;
+    }
+    .card-content {
+        padding: 10px 15px;
+    }
+    .stat-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .stat-value {
+        margin-top: 5px;
+        align-self: flex-end; /* Alinea el valor a la derecha */
+    }
+    .pax-details-section {
+        padding-top: 10px;
+    }
+    .total-summary-card {
+        padding-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    .client-tabs {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .tab-button {
+        width: 90%;
+        margin: 5px auto;
+    }
+}
