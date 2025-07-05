@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket de Comisión</title>
+    <link rel="stylesheet" href="../css/ticket.css"> 
+</head>
+<body>
+    <div class="ticket-container">
+        <header class="ticket-header">
+            <h1>Ticket de Pago de Comisión</h1>
+            <p>Sistema Aurelio Ski</p>
+        </header>
+
+        <section class="ticket-details">
+            <h2>Detalles del Pago</h2>
+            <div class="detail-row">
+                <span class="label">Vendedor:</span>
+                <span id="ticketVendor" class="value"></span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Fecha de Venta Asociada:</span>
+                <span id="ticketSalesDate" class="value"></span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Fecha de Pago:</span>
+                <span id="ticketPaymentDate" class="value"></span>
+            </div>
+        </section>
+
+        <section class="ticket-summary">
+            <h2>Resumen de Ventas y Comisiones</h2>
+            <div class="detail-row sub-header">
+                <span class="label-heading">Ventas por Método de Pago:</span>
+            </div>
+            <div class="detail-row total-amount">
+                <span class="label indent">Total Ventas Efectivo:</span>
+                <span id="ticketTotalEfectivoSales" class="value"></span>
+            </div>
+            <div class="detail-row total-amount">
+                <span class="label indent">Total Ventas Tarjeta Crédito:</span>
+                <span id="ticketTotalTarjetaCreditoSales" class="value"></span>
+            </div>
+            <div class="detail-row total-amount">
+                <span class="label indent">Total Ventas Tarjeta Débito:</span>
+                <span id="ticketTotalTarjetaDebitoSales" class="value"></span>
+            </div>
+            <div class="detail-row total-amount">
+                <span class="label indent">Total Ventas Transferencia:</span>
+                <span id="ticketTotalTransferenciaSales" class="value"></span>
+            </div>
+
+            <div class="detail-row sub-header">
+                <span class="label-heading">Comisiones Calculadas:</span>
+            </div>
+            <div class="detail-row">
+                <span class="label indent">Porcentaje Comisión Efectivo:</span>
+                <span id="ticketPercEfectivo" class="value"></span>
+            </div>
+            <div class="detail-row commission-amount">
+                <span class="label indent">Monto Comisión Efectivo:</span>
+                <span id="ticketCommEfectivo" class="value"></span>
+            </div>
+            <div class="detail-row">
+                <span class="label indent">Porcentaje Comisión Tarjeta Crédito:</span>
+                <span id="ticketPercTarjetaCredito" class="value"></span>
+            </div>
+            <div class="detail-row commission-amount">
+                <span class="label indent">Monto Comisión Tarjeta Crédito:</span>
+                <span id="ticketCommTarjetaCredito" class="value"></span>
+            </div>
+            <div class="detail-row">
+                <span class="label indent">Porcentaje Comisión Tarjeta Débito:</span>
+                <span id="ticketPercTarjetaDebito" class="value"></span>
+            </div>
+            <div class="detail-row commission-amount">
+                <span class="label indent">Monto Comisión Tarjeta Débito:</span>
+                <span id="ticketCommTarjetaDebito" class="value"></span>
+            </div>
+            <div class="detail-row">
+                <span class="label indent">Porcentaje Comisión Transferencia:</span>
+                <span id="ticketPercTransferencia" class="value"></span>
+            </div>
+            <div class="detail-row commission-amount">
+                <span class="label indent">Monto Comisión Transferencia:</span>
+                <span id="ticketCommTransferencia" class="value"></span>
+            </div>
+
+            <hr class="summary-divider">
+
+            <div class="detail-row total-gross">
+                <span class="label">Comisión Total Bruta:</span>
+                <span id="ticketGrossComm" class="value"></span>
+            </div>
+            <div class="detail-row deduction">
+                <span class="label">Deducción "Cobrado en Venta":</span>
+                <span id="ticketDeduction" class="value"></span>
+            </div>
+            <div class="detail-row final-total">
+                <span class="label">Monto Comisión Final Pagado:</span>
+                <span id="ticketFinalComm" class="value"></span>
+            </div>
+        </section>
+        
+        <footer class="ticket-footer">
+            <p>¡Gracias por tu trabajo!</p>
+            <p class="print-date">Generado el: <span id="currentPrintDate"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+
+            document.getElementById('ticketVendor').textContent = params.get('vendor') || 'N/A';
+            document.getElementById('ticketSalesDate').textContent = params.get('date') || 'N/A'; 
+            document.getElementById('ticketPaymentDate').textContent = params.get('paymentDate') || 'N/A';
+
+            const formatCurrency = (amount) => {
+                const num = parseFloat(amount);
+                return isNaN(num) ? 'ARS 0,00' : new Intl.NumberFormat('es-AR', {
+                    style: 'currency',
+                    currency: 'ARS',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(num);
+            };
+
+            // Sales by Payment Method
+            document.getElementById('ticketTotalEfectivoSales').textContent = formatCurrency(params.get('efectivo'));
+            document.getElementById('ticketTotalTarjetaCreditoSales').textContent = formatCurrency(params.get('tarjetaCredito'));
+            document.getElementById('ticketTotalTarjetaDebitoSales').textContent = formatCurrency(params.get('tarjetaDebito'));
+            document.getElementById('ticketTotalTransferenciaSales').textContent = formatCurrency(params.get('transferencia'));
+
+            // Commission Percentages and Amounts
+            document.getElementById('ticketPercEfectivo').textContent = `${params.get('percEfectivo') || '0'}%`;
+            document.getElementById('ticketCommEfectivo').textContent = formatCurrency(params.get('calcCommEfectivo'));
+            document.getElementById('ticketPercTarjetaCredito').textContent = `${params.get('percTarjetaCredito') || '0'}%`;
+            document.getElementById('ticketCommTarjetaCredito').textContent = formatCurrency(params.get('calcCommTarjetaCredito'));
+            document.getElementById('ticketPercTarjetaDebito').textContent = `${params.get('percTarjetaDebito') || '0'}%`;
+            document.getElementById('ticketCommTarjetaDebito').textContent = formatCurrency(params.get('calcCommTarjetaDebito'));
+            document.getElementById('ticketPercTransferencia').textContent = `${params.get('percTransferencia') || '0'}%`;
+            document.getElementById('ticketCommTransferencia').textContent = formatCurrency(params.get('calcCommTransferencia'));
+
+            document.getElementById('ticketGrossComm').textContent = formatCurrency(params.get('totalGrossComm'));
+            document.getElementById('ticketDeduction').textContent = formatCurrency(params.get('deduction') * -1); 
+            document.getElementById('ticketFinalComm').textContent = formatCurrency(params.get('finalComm'));
+
+            // Current print date
+            document.getElementById('currentPrintDate').textContent = new Date().toLocaleString('es-AR');
+
+            // Trigger print automatically after a short delay to ensure rendering
+            setTimeout(() => {
+                window.print();
+            }, 500); 
+        });
+    </script>
+</body>
+</html>
