@@ -1,0 +1,157 @@
+/* ticket.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea arriba para evitar centrado vertical excesivo */
+    min-height: 100vh;
+    margin: 20px 0; /* Margen superior e inferior */
+    color: #333;
+}
+
+.ticket-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+.ticket-header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #eee;
+    padding-bottom: 15px;
+}
+
+.ticket-header h1 {
+    color: #003049;
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+
+.ticket-header p {
+    color: #555;
+    font-size: 0.9em;
+}
+
+.ticket-details, .ticket-summary {
+    margin-bottom: 20px;
+}
+
+.ticket-details h2, .ticket-summary h2 {
+    color: #004b6f;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    align-items: baseline;
+}
+
+.label {
+    font-weight: 500;
+    color: #444;
+    flex-grow: 1; /* Permite que el label ocupe espacio */
+}
+
+.value {
+    font-weight: 600;
+    color: #000;
+    text-align: right; /* Alinea el valor a la derecha */
+}
+
+.sub-header {
+    font-weight: bold;
+    color: #003049;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 5px;
+}
+
+.label-heading {
+    width: 100%; /* Ocupa todo el ancho */
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.indent {
+    margin-left: 15px; /* Sangría para sub-ítems */
+}
+
+.commission-amount, .total-amount {
+    background-color: #f9f9f9;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.summary-divider {
+    border: 0;
+    border-top: 1px dashed #ddd;
+    margin: 20px 0;
+}
+
+.total-gross, .deduction, .final-total {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 8px 0;
+}
+
+.deduction .value {
+    color: #d9534f; /* Rojo para deducciones */
+}
+
+.final-total {
+    border-top: 2px solid #003049;
+    padding-top: 15px;
+    margin-top: 15px;
+    font-size: 1.2em;
+}
+
+.ticket-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 2px dashed #eee;
+    font-size: 0.85em;
+    color: #777;
+}
+
+.ticket-footer .print-date {
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Estilos para impresión */
+@media print {
+    body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        display: block; /* Desactiva flexbox en la impresión */
+    }
+    .ticket-container {
+        box-shadow: none;
+        border: none;
+        max-width: 100%; /* Ocupa todo el ancho disponible */
+        margin: 0;
+        padding: 0;
+    }
+    .ticket-footer .print-date {
+        display: none; /* Oculta la fecha de impresión si no la deseas en el ticket físico */
+    }
+}
