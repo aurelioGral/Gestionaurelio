@@ -107,7 +107,7 @@
             </div>
             <div class="form-group">
                 <label for="montoTotalClases">Monto Total Clases:</label>
-                <input type="text" id="montoTotalClases" value="0.00" readonly>
+                <input type="number" id="montoTotalClases" value="0.00" readonly>
             </div>
             <div class="form-group">
                 <label for="descuento">Descuento:</label>
@@ -115,8 +115,12 @@
             </div>
             <div class="form-group">
                 <label for="montoTotalFinal">Monto Total Final:</label>
-                <input type="text" id="montoTotalFinal" value="0.00" readonly>
+                <input type="number" id="montoTotalFinal" value="0.00" readonly>
             </div>
+            <div class="form-group" id="pagoHechoGroup" style="display: none;">
+    <label for="montoPagoHecho">Pago Adicional Hecho :</label>
+    <input type="number" id="montoPagoHecho" step="0.01" min="0" value="0.00">
+</div>
             <div class="form-group">
                 <label for="metodoPagoSelect">Método de Pago:</label>
                 <select id="metodoPagoSelect">
