@@ -22,6 +22,7 @@ const montoTotalClasesInput = document.getElementById('montoTotalClases');
 const descuentoInput = document.getElementById('descuento');
 const montoTotalFinalInput = document.getElementById('montoTotalFinal');
 const metodoPagoSelect = document.getElementById('metodoPagoSelect'); 
+const tipoDeMonedaSelect = document.getElementById('tipoDeMonedaSelect');
 const tipoPagoSelect = document.getElementById('tipoPagoSelect'); 
 const montoPagadoInput = document.getElementById('montoPagadoInput'); 
 const montoPagadoPreRESERVAInput = document.getElementById('montoPagadoPreRESERVAInput'); 
@@ -35,6 +36,9 @@ const messageModal = document.getElementById('messageModal');
 const modalMessage = document.getElementById('modalMessage');
 const closeButton = document.querySelector('.close-button');
 const loadingOverlay = document.getElementById('loadingOverlay');
+const tipoDeCambioGroup = document.getElementById('tipoDeCambioGroup');
+const tipoDeCambioInput = document.getElementById('tipoDeCambio');
+
 
 const preReservaDateSelect = document.getElementById('preReservaDateSelect');
 const preReservasTableContainer = document.getElementById('preReservasTableContainer');
@@ -223,7 +227,7 @@ function generatePasajeroRows(count) {
                 <label for="monto_clase_pax${i}">Valor Clase:</label>
                 <input type="number" id="monto_clase_pax${i}" min="0" value="0">
             </div>
-        `;
+            `;
         pasajerosContainer.appendChild(row);
 
         // Llenar los select con opciones
@@ -309,21 +313,13 @@ function getFormData() {
         DIAS: cantidadDiasAlquilerInput.value,
         CANTIDAD_PASAJEROS: reservaPasajerosInput.value,
         NOMBRE_COMPLETO: nombreCompletoInput.value,
-        TEL_MAIL: telMailInput.value,
+        TEL_MAIL: telMailInput.value, // Corregido: Coincide con el encabezado de la hoja
         VENDEDOR: vendedorSelect.value,
         OBSERVACIONES: observacionesTextarea.value,
         MONTO_TOTAL_ALQUILER: parseFloat(montoTotalAlquilerInput.value) || 0,
         MONTO_TOTAL_CLASES: parseFloat(montoTotalClasesInput.value) || 0,
         DESCUENTO: parseFloat(descuentoInput.value) || 0,
         MONTO_TOTAL_FINAL: parseFloat(montoTotalFinalInput.value) || 0,
-        METODO_DE_PAGO: metodoPagoSelect.value,
-        
-        // Campos de pago
-        TIPO_DE_PAGO: tipoPagoSelect.value, 
-        MONTO_PAGADO_PRE_RESERVA: parseFloat(montoPagadoPreRESERVAInput.value) || 0,
-        // MONTO_PAGADO será calculado y añadido al final de esta función
-        
-        RESTA_PAGAR: parseFloat(restaPagarInput.value) || 0,
         ID_PRE_RESERVA: inputPreReservaId.value || '',
         ESTADO: estadoPreReservaHidden.value || '' // Estado de la pre-reserva cargada
     };
@@ -341,11 +337,6 @@ function getFormData() {
         formData[`CLASES_PAX${paxNum}`] = row.querySelector(`#clases_pax${paxNum}`)?.value || '';
         formData[`MONTO_ALQUILER_PAX${paxNum}`] = parseFloat(row.querySelector(`#monto_alquiler_pax${paxNum}`)?.value) || 0;
         formData[`MONTO_CLASE_PAX${paxNum}`] = parseFloat(row.querySelector(`#monto_clase_pax${paxNum}`)?.value) || 0;
-        // Asegurarse de incluir también nombre, DNI, fecha de nacimiento y observaciones de cada pasajero
-        formData[`NOMBRE_COMPLETO_PAX${paxNum}`] = row.querySelector(`#nombreCompletoPax${paxNum}`)?.value || '';
-        formData[`DNI_PAX${paxNum}`] = row.querySelector(`#dniPax${paxNum}`)?.value || '';
-        formData[`FECHA_NACIMIENTO_PAX${paxNum}`] = row.querySelector(`#fechaNacimientoPax${paxNum}`)?.value || '';
-        formData[`OBSERVACIONES_PAX${paxNum}`] = row.querySelector(`#observacionesPax${paxNum}`)?.value || '';
     });
 
     // Lógica para determinar el valor final de 'MONTO_PAGADO' que se enviará a la hoja 'DatosRESERVA'.
@@ -357,29 +348,146 @@ function getFormData() {
 
     if (pagoHechoGroup.style.display === 'block') {
         // Escenario: Se está actualizando una reserva definitiva con pago parcial y se realiza un "pago hecho" adicional.
-        // En este caso, 'montoPagadoInput' muestra la suma del MONTO_PAGADO_EXISTENTE de la hoja y el MONTO_PAGADO_PRE_RESERVA.
-        // Para obtener el MONTO_PAGADO_EXISTENTE original (sin la pre-reserva), lo restamos del valor mostrado.
         const montoPagadoExistenteOriginal = montoPagadoMostradoEnInput - currentMontoPagadoPreReserva;
-        // El nuevo MONTO_PAGADO a guardar en la hoja es el MONTO_PAGADO_EXISTENTE_ORIGINAL más el monto adicional hecho.
         montoPagadoParaGuardar = montoPagadoExistenteOriginal + montoAdicionalHecho;
     } else if (tipoPagoSelect.value === 'Total') {
         // Escenario: El tipo de pago se ha establecido en 'Total'.
-        // El MONTO_PAGADO que se guarda en la hoja debe ser el MONTO_TOTAL_FINAL
-        // menos lo que ya se pagó en la pre-reserva (ya que MONTO_PAGADO_PRE_RESERVA se guarda en una columna separada).
         montoPagadoParaGuardar = (parseFloat(montoTotalFinalInput.value) || 0) - currentMontoPagadoPreReserva;
     } else {
         // Escenario: Nueva reserva parcial, o edición manual de 'Monto Pagado'
-        // cuando el campo "Pago Adicional Hecho" no está visible.
-        // El MONTO_PAGADO a guardar en la hoja es el valor mostrado en 'montoPagadoInput'
-        // menos el monto de pre-reserva (para que la columna 'MONTO_PAGADO' solo contenga el pago definitivo).
         montoPagadoParaGuardar = montoPagadoMostradoEnInput - currentMontoPagadoPreReserva;
-        // Asegurarse de que el monto no sea negativo.
         if (montoPagadoParaGuardar < 0) montoPagadoParaGuardar = 0;
     }
 
-    formData.MONTO_PAGADO = montoPagadoParaGuardar;
-    
-    // Añadir el campo SI_PAGO_TOTAL, que es importante para la lógica en Google Apps Script
+    // --- INICIO DE NUEVA LÓGICA PARA MANEJO DE MONEDAS, TIPO_DE_CAMBIO Y CONVERSION_A_PESOS ---
+    const tipoDeMoneda = tipoDeMonedaSelect.value;
+    formData.TIPO_DE_MONEDA = tipoDeMoneda; // Siempre se guarda el tipo de moneda seleccionado
+
+    let tipoDeCambioValor = ''; // Inicializar para la columna TIPO_DE_CAMBIO
+    let conversionAPesos = '';  // Inicializar para la columna CONVERSION_A_PESOS
+
+    if (tipoDeMoneda === 'dolar usa' || tipoDeMoneda === 'real brl') {
+        // Solo procesar si la moneda es DÓLAR o REAL
+        tipoDeCambioValor = parseFloat(tipoDeCambioInput.value) || 0; // Obtener el valor del input
+
+        // Realizar el cálculo de CONVERSION_A_PESOS
+        if (tipoDeCambioValor > 0 && formData.MONTO_TOTAL_FINAL > 0) {
+            conversionAPesos = (formData.MONTO_TOTAL_FINAL * tipoDeCambioValor).toFixed(2);
+        } else {
+            // Si el tipo de cambio no es válido o el monto final no es válido, la conversión es 0.00
+            conversionAPesos = '0.00';
+        }
+    }
+    // Si tipoDeMoneda no es 'DOLAR' ni 'REAL', tipoDeCambioValor y conversionAPesos permanecerán como strings vacíos
+
+    // Añadir los nuevos campos al objeto formData
+    formData.TIPO_DE_CAMBIO = tipoDeCambioValor;
+    formData.CONVERSION_A_PESOS = conversionAPesos;
+    // --- FIN DE NUEVA LÓGICA ---
+
+    // Determinar el valor de PAGO_PARCIAL basado en el TIPO_DE_PAGO
+    const pagoParcialValue = (tipoPagoSelect.value === 'Parcial') ? montoPagadoMostradoEnInput : 0;
+
+    switch (tipoDeMoneda) {
+        case 'pesos arg': // Ajustado de 'pesos arg' para coincidir con tu HTML
+            formData.METODO_DE_PAGO = metodoPagoSelect.value;
+            formData.PAGO_PARCIAL = pagoParcialValue;
+            formData.RESTA_PAGAR = parseFloat(restaPagarInput.value) || 0;
+            formData.TIPO_DE_PAGO = tipoPagoSelect.value;
+            formData.MONTO_PAGADO = montoPagadoParaGuardar;
+            formData.MONTO_PAGADO_PRE_RESERVA = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
+            formData.PAGO_HECHO = parseFloat(montoPagoHechoInput.value) || 0;
+            // Para asegurar que no se envíen datos residuales de otras monedas
+            delete formData.METODO_DE_PAGO_REAL;
+            delete formData.PAGO_PARCIAL_REAL;
+            delete formData.RESTA_PAGAR_REAL;
+            delete formData.TIPO_DE_PAGO_REAL;
+            delete formData.MONTO_PAGADO_REAL;
+            delete formData.MONTO_PAGADO_PRE_RESERVA_REAL;
+            delete formData.PAGO_HECHO_REAL;
+            delete formData.METODO_DE_PAGO_DOLAR;
+            delete formData.PAGO_PARCIAL_DOLAR;
+            delete formData.RESTA_PAGAR_DOLAR;
+            delete formData.TIPO_DE_PAGO_DOLAR;
+            delete formData.MONTO_PAGADO_DOLAR;
+            delete formData.MONTO_PAGADO_PRE_RESERVA_DOLAR;
+            delete formData.PAGO_HECHO_DOLAR;
+            break;
+        case 'real brl': // Ajustado de 'real brl'
+            formData.METODO_DE_PAGO_REAL = metodoPagoSelect.value;
+            formData.PAGO_PARCIAL_REAL = pagoParcialValue;
+            formData.RESTA_PAGAR_REAL = parseFloat(restaPagarInput.value) || 0;
+            formData.TIPO_DE_PAGO_REAL = tipoPagoSelect.value;
+            formData.MONTO_PAGADO_REAL = montoPagadoParaGuardar;
+            formData.MONTO_PAGADO_PRE_RESERVA_REAL = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
+            formData.PAGO_HECHO_REAL = parseFloat(montoPagoHechoInput.value) || 0;
+            // Limpiar campos de otras monedas
+            delete formData.METODO_DE_PAGO;
+            delete formData.PAGO_PARCIAL;
+            delete formData.RESTA_PAGAR;
+            delete formData.TIPO_DE_PAGO;
+            delete formData.MONTO_PAGADO;
+            delete formData.MONTO_PAGADO_PRE_RESERVA;
+            delete formData.PAGO_HECHO;
+            delete formData.METODO_DE_PAGO_DOLAR;
+            delete formData.PAGO_PARCIAL_DOLAR;
+            delete formData.RESTA_PAGAR_DOLAR;
+            delete formData.TIPO_DE_PAGO_DOLAR;
+            delete formData.MONTO_PAGADO_DOLAR;
+            delete formData.MONTO_PAGADO_PRE_RESERVA_DOLAR;
+            delete formData.PAGO_HECHO_DOLAR;
+            break;
+        case 'dolar usa': // Ajustado de 'dolar usa'
+            formData.METODO_DE_PAGO_DOLAR = metodoPagoSelect.value;
+            formData.PAGO_PARCIAL_DOLAR = pagoParcialValue;
+            formData.RESTA_PAGAR_DOLAR = parseFloat(restaPagarInput.value) || 0;
+            formData.TIPO_DE_PAGO_DOLAR = tipoPagoSelect.value;
+            formData.MONTO_PAGADO_DOLAR = montoPagadoParaGuardar;
+            formData.MONTO_PAGADO_PRE_RESERVA_DOLAR = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
+            formData.PAGO_HECHO_DOLAR = parseFloat(montoPagoHechoInput.value) || 0;
+            // Limpiar campos de otras monedas
+            delete formData.METODO_DE_PAGO;
+            delete formData.PAGO_PARCIAL;
+            delete formData.RESTA_PAGAR;
+            delete formData.TIPO_DE_PAGO;
+            delete formData.MONTO_PAGADO;
+            delete formData.MONTO_PAGADO_PRE_RESERVA;
+            delete formData.PAGO_HECHO;
+            delete formData.METODO_DE_PAGO_REAL;
+            delete formData.PAGO_PARCIAL_REAL;
+            delete formData.RESTA_PAGAR_REAL;
+            delete formData.TIPO_DE_PAGO_REAL;
+            delete formData.MONTO_PAGADO_REAL;
+            delete formData.MONTO_PAGADO_PRE_RESERVA_REAL;
+            delete formData.PAGO_HECHO_REAL;
+            break;
+        default: // Fallback por si acaso, guarda en las columnas de pesos
+            formData.METODO_DE_PAGO = metodoPagoSelect.value;
+            formData.PAGO_PARCIAL = pagoParcialValue;
+            formData.RESTA_PAGAR = parseFloat(restaPagarInput.value) || 0;
+            formData.TIPO_DE_PAGO = tipoPagoSelect.value;
+            formData.MONTO_PAGADO = montoPagadoParaGuardar;
+            formData.MONTO_PAGADO_PRE_RESERVA = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
+            formData.PAGO_HECHO = parseFloat(montoPagoHechoInput.value) || 0;
+            // Asegurarse de que campos de otras monedas no se envíen
+            delete formData.METODO_DE_PAGO_REAL;
+            delete formData.PAGO_PARCIAL_REAL;
+            delete formData.RESTA_PAGAR_REAL;
+            delete formData.TIPO_DE_PAGO_REAL;
+            delete formData.MONTO_PAGADO_REAL;
+            delete formData.MONTO_PAGADO_PRE_RESERVA_REAL;
+            delete formData.PAGO_HECHO_REAL;
+            delete formData.METODO_DE_PAGO_DOLAR;
+            delete formData.PAGO_PARCIAL_DOLAR;
+            delete formData.RESTA_PAGAR_DOLAR;
+            delete formData.TIPO_DE_PAGO_DOLAR;
+            delete formData.MONTO_PAGADO_DOLAR;
+            delete formData.MONTO_PAGADO_PRE_RESERVA_DOLAR;
+            delete formData.PAGO_HECHO_DOLAR;
+            break;
+    }
+
+    // Este campo es independiente de la moneda, se mantiene aquí
     formData.SI_PAGO_TOTAL = (tipoPagoSelect.value === 'Total');
 
     return formData;
@@ -392,7 +500,32 @@ function getFormData() {
 // --- Función fillForm(data) ---
 function fillForm(data) {
     // Limpiar el formulario primero para asegurar un estado consistente
-    clearForm(); 
+    fechaInput.value = '';
+    cantidadDiasAlquilerInput.value = '';
+    vendedorSelect.value = '';
+    reservaPasajerosInput.value = '1'; // Resetear a 1 pasajero por defecto
+    nombreCompletoInput.value = '';
+    telMailInput.value = '';
+    observacionesTextarea.value = '';
+    montoTotalAlquilerInput.value = '';
+    montoTotalClasesInput.value = '';
+    descuentoInput.value = '0';
+    montoTotalFinalInput.value = '';
+    metodoPagoSelect.value = '';
+    montoPagadoInput.value = '';
+    montoPagadoPreRESERVAInput.value = '';
+    restaPagarInput.value = '';
+    montoPagoHechoInput.value = '';
+    pagoHechoGroup.style.display = 'none';
+    montoPagadoInput.removeAttribute('readonly');
+    montoPagadoInput.style.backgroundColor = '#fcfcfc';
+    if (tipoPagoSelect) tipoPagoSelect.value = '';
+    if (montoPagadoInput) { montoPagadoInput.value = '0'; montoPagadoInput.removeAttribute('readonly'); montoPagadoInput.style.backgroundColor = '#fcfcfc'; }
+    if (montoPagadoPreRESERVAInput) { montoPagadoPreRESERVAInput.value = '0'; montoPagadoPreRESERVAInput.removeAttribute('readonly'); montoPagadoPreRESERVAInput.style.backgroundColor = '#fcfcfc'; }
+    if (estadoPreReservaHidden) { estadoPreReservaHidden.value = ''; }
+    inputPreReservaId.value = '';
+    inputBuscarReserva.value = '';
+    generatePasajeroRows(1);
 
     // Determinar si se está cargando una pre-reserva o una reserva definitiva
     const isPreReservaLoad = data.hasOwnProperty('ID_PRE_RESERVA') && (!data.hasOwnProperty('NRESERVA') || !data.NRESERVA);
@@ -404,34 +537,63 @@ function fillForm(data) {
     cantidadDiasAlquilerInput.value = data.DIAS || '';
     vendedorSelect.value = data.VENDEDOR || '';
     nombreCompletoInput.value = data.NOMBRE_COMPLETO || '';
-    telMailInput.value = data.TELEFONO_MAIL || '';
+    telMailInput.value = data.TEL_MAIL || ''; // CORREGIDO: Usar TEL_MAIL de la hoja
     observacionesTextarea.value = data.OBSERVACIONES || '';
     
-    // Pasajeros
-    pasajerosContainer.innerHTML = ''; 
-    if (data.PASAJEROS && Array.isArray(data.PASAJEROS)) {
-        data.PASAJEROS.forEach(pax => {
-            addPassengerInput(pax.NOMBRE_COMPLETO_PAX, pax.DNI_PAX, pax.FECHA_NACIMIENTO_PAX, pax.OBSERVACIONES_PAX, pax.MONTO_ALQUILER_PAX, pax.MONTO_CLASE_PAX);
-        });
-    } else if (data.CANTIDAD_PASAJEROS) {
-         for (let i = 0; i < data.CANTIDAD_PASAJEROS; i++) {
-            addPassengerInput();
-        }
-    } else {
-        addPassengerInput(); 
-    }
+    // Pasajeros: Primero generar las filas de inputs vacías
     reservaPasajerosInput.value = data.CANTIDAD_PASAJEROS || 1;
+    generatePasajeroRows(parseInt(reservaPasajerosInput.value)); // Generar las filas de pasajeros necesarias
+
+    // Luego, rellenar los datos de cada pasajero si vienen en el objeto 'data' (desde la hoja de cálculo)
+    // Esto es crucial si el backend devuelve un objeto plano y no un array 'PASAJEROS'
+    for (let i = 1; i <= parseInt(data.CANTIDAD_PASAJEROS || 0); i++) {
+        const tablasPaxElement = document.getElementById(`tablas_pax${i}`);
+        if (tablasPaxElement) {
+            tablasPaxElement.value = data[`TABLAS_PAX${i}`] || '';
+        }
+        const botasPaxElement = document.getElementById(`botas_pax${i}`);
+        if (botasPaxElement) {
+            botasPaxElement.value = data[`BOTAS_PAX${i}`] || '';
+        }
+        const ropaPaxElement = document.getElementById(`ropa_pax${i}`);
+        if (ropaPaxElement) {
+            ropaPaxElement.value = data[`ROPA_PAX${i}`] || '';
+        }
+        const cascoAntiparrasPaxElement = document.getElementById(`casco_y_antiparras_pax${i}`);
+        if (cascoAntiparrasPaxElement) {
+            cascoAntiparrasPaxElement.value = data[`CASCO_Y_ANTIPARRAS_PAX${i}`] || '';
+        }
+        const clasesPaxElement = document.getElementById(`clases_pax${i}`);
+        if (clasesPaxElement) {
+            clasesPaxElement.value = data[`CLASES_PAX${i}`] || '';
+        }
+        const montoAlquilerPaxElement = document.getElementById(`monto_alquiler_pax${i}`);
+        if (montoAlquilerPaxElement) {
+            montoAlquilerPaxElement.value = (parseFloat(data[`MONTO_ALQUILER_PAX${i}`]) || 0).toFixed(2);
+        }
+        const montoClasePaxElement = document.getElementById(`monto_clase_pax${i}`);
+        if (montoClasePaxElement) {
+            montoClasePaxElement.value = (parseFloat(data[`MONTO_CLASE_PAX${i}`]) || 0).toFixed(2);
+        }
+    }
+    // Fin de la lógica de relleno de pasajeros
 
     // --- Llenar campos de totales y pago ---
     montoTotalAlquilerInput.value = (parseFloat(data.MONTO_TOTAL_ALQUILER) || 0).toFixed(2);
     montoTotalClasesInput.value = (parseFloat(data.MONTO_TOTAL_CLASES) || 0).toFixed(2);
     descuentoInput.value = (parseFloat(data.DESCUENTO) || 0).toFixed(2);
     montoTotalFinalInput.value = (parseFloat(data.MONTO_TOTAL_FINAL) || 0).toFixed(2);
-    metodoPagoSelect.value = data.METODO_DE_PAGO || '';
-    tipoPagoSelect.value = data.TIPO_DE_PAGO || 'Parcial'; 
+
+    // NUEVO: Cargar el TIPO_DE_MONEDA si existe en los datos
+    tipoDeMonedaSelect.value = data.TIPO_DE_MONEDA || 'pesos arg'; // Asignar el valor cargado o el predeterminado
+
+    // CAMBIO: Cargar el método y tipo de pago priorizando la moneda específica
+    metodoPagoSelect.value = data.METODO_DE_PAGO || data.METODO_DE_PAGO_REAL || data.METODO_DE_PAGO_DOLAR || '';
+    tipoPagoSelect.value = data.TIPO_DE_PAGO || data.TIPO_DE_PAGO_REAL || data.TIPO_DE_PAGO_DOLAR || 'Parcial'; 
     
+    // CAMBIO: Cargar los montos de pago priorizando la moneda específica
     // 1. Siempre se carga el MONTO_PAGADO_PRE_RESERVA si existe en los datos
-    montoPagadoPreRESERVAInput.value = (parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || 0).toFixed(2);
+    montoPagadoPreRESERVAInput.value = (parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || parseFloat(data.MONTO_PAGADO_PRE_RESERVA_REAL) || parseFloat(data.MONTO_PAGADO_PRE_RESERVA_DOLAR) || 0).toFixed(2);
 
     // 2. Lógica para 'Monto Pagado' y 'Pago Adicional Hecho'
     pagoHechoGroup.style.display = 'none'; // Ocultar por defecto
@@ -445,8 +607,10 @@ function fillForm(data) {
         montoPagadoInput.style.backgroundColor = '#fcfcfc';
     } else if (isDefinitiveReservaLoad) {
         // Si se carga una Reserva Definitiva existente para actualizar:
-        const currentMontoPagado = parseFloat(data.MONTO_PAGADO) || 0;
-        const currentMontoPagadoPreReserva = parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || 0;
+        // CAMBIO: Priorizar MONTO_PAGADO de la moneda específica
+        const currentMontoPagado = parseFloat(data.MONTO_PAGADO) || parseFloat(data.MONTO_PAGADO_REAL) || parseFloat(data.MONTO_PAGADO_DOLAR) || 0;
+        // CAMBIO: Priorizar MONTO_PAGADO_PRE_RESERVA de la moneda específica
+        const currentMontoPagadoPreReserva = parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || parseFloat(data.MONTO_PAGADO_PRE_RESERVA_REAL) || parseFloat(data.MONTO_PAGADO_PRE_RESERVA_DOLAR) || 0;
         
         // 'montoPagadoInput' muestra la suma de todos los pagos ANTERIORES
         montoPagadoInput.value = (currentMontoPagado + currentMontoPagadoPreReserva).toFixed(2);
@@ -455,13 +619,17 @@ function fillForm(data) {
         montoPagadoInput.setAttribute('readonly', true); 
         montoPagadoInput.style.backgroundColor = '#f0f0f0';
 
+        // CAMBIO: Priorizar RESTA_PAGAR y PAGO_HECHO de la moneda específica
+        restaPagarInput.value = (parseFloat(data.RESTA_PAGAR) || parseFloat(data.RESTA_PAGAR_REAL) || parseFloat(data.RESTA_PAGAR_DOLAR) || 0).toFixed(2);
+        montoPagoHechoInput.value = (parseFloat(data.PAGO_HECHO) || parseFloat(data.PAGO_HECHO_REAL) || parseFloat(data.PAGO_HECHO_DOLAR) || 0).toFixed(2);
+
         // Setear el campo oculto para el estado de la pre-reserva
         if (estadoPreReservaHidden) {
-            estadoPreReservaHidden.value = data.ESTADO || ''; 
+            estadoPreReservaHidden.value = data.ESTADO; 
         }
     } else {
         // Estado por defecto para un formulario nuevo y vacío
-        montoPagadoInput.value = '0.00';
+        montoPagadoInput.value = '';
         montoPagadoInput.removeAttribute('readonly');
         montoPagadoInput.style.backgroundColor = '#fcfcfc';
     }
@@ -481,8 +649,8 @@ function fillForm(data) {
         montoPagadoInput.setAttribute('readonly', true); 
         montoPagadoInput.style.backgroundColor = '#f0f0f0';
     } else {
-         pagoHechoGroup.style.display = 'none';
-         montoPagoHechoInput.value = '0.00'; // Asegurarse de que esté limpio si se oculta
+        pagoHechoGroup.style.display = 'none';
+        montoPagoHechoInput.value = '0.00'; // Asegurarse de que esté limpio si se oculta
     }
 
     // Aplicar lógica de 'Tipo de Pago' después de todos los cálculos y ajustes de visibilidad.
@@ -514,19 +682,23 @@ function clearForm() {
     nombreCompletoInput.value = '';
     telMailInput.value = '';
     observacionesTextarea.value = '';
-    montoTotalAlquilerInput.value = '0.00'; 
-    montoTotalClasesInput.value = '0.00';
-    descuentoInput.value = '0';
-    montoTotalFinalInput.value = '0.00';
+    montoTotalAlquilerInput.value = ''; 
+    montoTotalClasesInput.value = '';
+    descuentoInput.value = '';
+    montoTotalFinalInput.value = '';
     metodoPagoSelect.value = '';
-
-    montoPagadoInput.value = '0.00';
-    montoPagadoPreRESERVAInput.value = '0.00';
-    restaPagarInput.value = '0.00';
+tipoDeMonedaSelect.value = 'pesos arg'; // Asegurarse de que la moneda se resetee
+    montoPagadoInput.value = '';
+    montoPagadoPreRESERVAInput.value = '';
+    restaPagarInput.value = '';
     
     // Limpiar y ocultar el nuevo input de pago adicional
-    montoPagoHechoInput.value = '0.00';
+    montoPagoHechoInput.value = '';
     pagoHechoGroup.style.display = 'none'; // Ocultar el grupo
+
+     // Limpiar y ocultar el nuevo input de pago adicional
+    tipoDeCambioInput.value = '';
+   tipoDeCambioGroup.style.display = 'none'; // Ocultar el grupo
     
     // Asegurarse de que montoPagadoInput sea editable por defecto al limpiar
     montoPagadoInput.removeAttribute('readonly');
@@ -535,12 +707,12 @@ function clearForm() {
     // Limpiar nuevos campos de pago
     if (tipoPagoSelect) tipoPagoSelect.value = ''; 
     if (montoPagadoInput) {
-        montoPagadoInput.value = '0';
+        montoPagadoInput.value = '';
         montoPagadoInput.removeAttribute('readonly'); 
         montoPagadoInput.style.backgroundColor = '#fcfcfc';
     }
      if (montoPagadoPreRESERVAInput) {
-        montoPagadoPreRESERVAInput.value = '0';
+        montoPagadoPreRESERVAInput.value = '';
         montoPagadoPreRESERVAInput.removeAttribute('readonly'); 
         montoPagadoPreRESERVAInput.style.backgroundColor = '#fcfcfc';
     }
@@ -549,7 +721,7 @@ function clearForm() {
         estadoPreReservaHidden.value = ''; 
     }
 
-    restaPagarInput.value = '0.00';
+    restaPagarInput.value = '';
     inputPreReservaId.value = '';
     inputBuscarReserva.value = '';
 
@@ -588,9 +760,51 @@ function generatePrintableTicket(data) {
     const montoTotalClases = parseFloat(data.MONTO_TOTAL_CLASES) || 0;
     const descuento = parseFloat(data.DESCUENTO) || 0;
     const montoTotalFinal = parseFloat(data.MONTO_TOTAL_FINAL) || 0;
-    const montoPagado = parseFloat(data.MONTO_PAGADO) || 0; 
-    const montoPagadoPreRESERVA = parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || 0; 
-    const restaPagar = parseFloat(data.RESTA_PAGAR) || 0;
+
+    // CAMBIO: Obtener el tipo de moneda y los valores de pago correspondientes
+    const tipoDeMoneda = data.TIPO_DE_MONEDA || 'pesos arg'; // Asegurarse de tener un valor por defecto
+
+    let montoPagado;
+    let montoPagadoPreRESERVA;
+    let restaPagar;
+    let metodoDePago;
+    let tipoDePago;
+    let pagoHecho;
+
+    switch (tipoDeMoneda) {
+        case 'pesos arg':
+            montoPagado = parseFloat(data.MONTO_PAGADO) || 0;
+            montoPagadoPreRESERVA = parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || 0;
+            restaPagar = parseFloat(data.RESTA_PAGAR) || 0;
+            metodoDePago = data.METODO_DE_PAGO || '-';
+            tipoDePago = data.TIPO_DE_PAGO || '-';
+            pagoHecho = parseFloat(data.PAGO_HECHO) || 0;
+            break;
+        case 'real brl':
+            montoPagado = parseFloat(data.MONTO_PAGADO_REAL) || 0;
+            montoPagadoPreRESERVA = parseFloat(data.MONTO_PAGADO_PRE_RESERVA_REAL) || 0;
+            restaPagar = parseFloat(data.RESTA_PAGAR_REAL) || 0;
+            metodoDePago = data.METODO_DE_PAGO_REAL || '-';
+            tipoDePago = data.TIPO_DE_PAGO_REAL || '-';
+            pagoHecho = parseFloat(data.PAGO_HECHO_REAL) || 0;
+            break;
+        case 'dolar usa':
+            montoPagado = parseFloat(data.MONTO_PAGADO_DOLAR) || 0;
+            montoPagadoPreRESERVA = parseFloat(data.MONTO_PAGADO_PRE_RESERVA_DOLAR) || 0;
+            restaPagar = parseFloat(data.RESTA_PAGAR_DOLAR) || 0;
+            metodoDePago = data.METODO_DE_PAGO_DOLAR || '-';
+            tipoDePago = data.TIPO_DE_PAGO_DOLAR || '-';
+            pagoHecho = parseFloat(data.PAGO_HECHO_DOLAR) || 0;
+            break;
+        default: // Fallback a pesos arg si el tipo de moneda no es reconocido
+            montoPagado = parseFloat(data.MONTO_PAGADO) || 0;
+            montoPagadoPreRESERVA = parseFloat(data.MONTO_PAGADO_PRE_RESERVA) || 0;
+            restaPagar = parseFloat(data.RESTA_PAGAR) || 0;
+            metodoDePago = data.METODO_DE_PAGO || '-';
+            tipoDePago = data.TIPO_DE_PAGO || '-';
+            pagoHecho = parseFloat(data.PAGO_HECHO) || 0;
+            break;
+    }
 
     const singleTicketContent = `
         <div class="ticket">
@@ -612,10 +826,12 @@ function generatePrintableTicket(data) {
             <p class="flex-row"><span>Subtotal Clases:</span> <span>$${montoTotalClases.toFixed(2)}</span></p>
             <p class="flex-row"><span>Descuento:</span> <span>$${descuento.toFixed(2)}</span></p>
             <p class="flex-row total-line"><span>MONTO TOTAL FINAL:</span> <span>$${montoTotalFinal.toFixed(2)}</span></p>
-            <p class="flex-row"><span>Método de Pago:</span> <span>${data.METODO_DE_PAGO || '-'}</span></p>
-            <p class="flex-row"><span>Tipo de Pago:</span> <span>${data.TIPO_DE_PAGO || '-'}</span></p>
+            <p class="flex-row"><span>Tipo de Moneda:</span> <span>${tipoDeMoneda.toUpperCase()}</span></p> <!-- NUEVO: Tipo de Moneda -->
+            <p class="flex-row"><span>Método de Pago:</span> <span>${metodoDePago}</span></p>
+            <p class="flex-row"><span>Tipo de Pago:</span> <span>${tipoDePago}</span></p>
             <p class="flex-row"><span>Monto Pagado:</span> <span>$${montoPagado.toFixed(2)}</span></p>
             <p class="flex-row"><span>Monto Pagado en Pre Reserva:</span> <span>$${montoPagadoPreRESERVA.toFixed(2)}</span></p>
+            <p class="flex-row"><span>Pago Adicional Hecho:</span> <span>$${pagoHecho.toFixed(2)}</span></p> <!-- NUEVO: Pago Adicional -->
             <p class="flex-row"><span>Resta Pagar:</span> <span>$${restaPagar.toFixed(2)}</span></p>
             <div class="line"></div>
             <p><strong>Observaciones:</strong> ${data.OBSERVACIONES || '-'}</p>
@@ -858,6 +1074,13 @@ document.addEventListener('DOMContentLoaded', () => {
         displayPreReservasTable(event.target.value);
     });
 
+    // Establecer el tipo de moneda por defecto si no hay una seleccionada
+if (!tipoDeMonedaSelect.value) {
+    tipoDeMonedaSelect.value = 'pesos arg';
+}
+
+
+
     reservaPasajerosInput.addEventListener('input', (e) => {
         const count = parseInt(e.target.value);
         if (!isNaN(count) && count >= 1 && count <= 15) {
@@ -868,6 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    
     generatePasajeroRows(parseInt(reservaPasajerosInput.value));
     
     getNextReservaIdAndPopulate();
@@ -892,6 +1116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
 // Botón Buscar Pre-Reserva
 btnBuscarPreReserva.addEventListener('click', async () => {
     const id = inputPreReservaId.value.trim();
@@ -901,6 +1126,30 @@ btnBuscarPreReserva.addEventListener('click', async () => {
     }
     await loadPreReservaIntoForm(id); // Usa la nueva función unificada
 });
+
+// --- Lógica para TIPO_DE_CAMBIO ---
+    // Función para controlar la visibilidad y estado del campo TIPO_DE_CAMBIO
+    const toggleTipoDeCambio = () => {
+        const selectedCurrency = tipoDeMonedaSelect.value;
+       if (selectedCurrency === 'dolar usa' || selectedCurrency === 'real brl') { // Coincide con los 'value' de tu HTML
+        tipoDeCambioGroup.style.display = 'block'; // Mostrar el grupo
+        tipoDeCambioInput.removeAttribute('disabled'); // Habilitar el input
+        tipoDeCambioInput.setAttribute('required', true); // Hacerlo requerido
+        tipoDeCambioInput.focus(); // Opcional: poner el foco en el campo
+    } else {
+        tipoDeCambioGroup.style.display = 'none'; // Ocultar el grupo
+        tipoDeCambioInput.setAttribute('disabled', true); // Deshabilitar el input
+        tipoDeCambioInput.removeAttribute('required'); // Quitar el atributo requerido
+        tipoDeCambioInput.value = ''; // Limpiar el valor cuando se oculta/deshabilita
+    }
+    };
+
+    // Escuchar cambios en el selector de tipo de moneda
+    tipoDeMonedaSelect.addEventListener('change', toggleTipoDeCambio);
+
+    // Llamar una vez al cargar para establecer el estado inicial del campo TIPO_DE_CAMBIO
+    toggleTipoDeCambio();
+
 
 // Botón Buscar Reserva
 btnBuscarReserva.addEventListener('click', async () => {
@@ -917,9 +1166,7 @@ btnBuscarReserva.addEventListener('click', async () => {
         // Cuando cargas una reserva definitiva, no es una pre-reserva, 
         // así que limpia el campo de PRE_RESERVA_ID y el estado oculto.
         inputPreReservaId.value = ''; 
-        if (estadoPreReservaHidden) {
-            estadoPreReservaHidden.value = ''; 
-        }
+        
     } else {
         showMessage(response.message, 'error');
         clearForm();
@@ -1011,20 +1258,7 @@ async function getNextReservaIdAndPopulate() {
 
 // Listener para el tipo de pago (Total/Parcial)
 
-tipoPagoSelect.addEventListener('change', () => {
-    // Recalcular restaPagar primero, basándose en los inputs actuales
-    // (incluido montoPagadoPreRESERVAInput y el valor actual de montoPagadoInput)
-    calculateRestaPagar(); 
-
-    if (tipoPagoSelect.value === 'Total') {
-        montoPagadoInput.value = restaPagarInput.value; // Establecer al valor calculado de "resta a pagar"
-        montoPagadoInput.setAttribute('readonly', true); 
-        montoPagadoInput.style.backgroundColor = '#f0f0f0';
-    } else {
-        montoPagadoInput.removeAttribute('readonly'); 
-        montoPagadoInput.style.backgroundColor = '#fcfcfc'; 
-    }
-});
+tipoPagoSelect.addEventListener('change', calculateRestaPagar);
 
 // Listener para el Monto Pagado (para recalcular la resta a pagar)
 montoPagadoInput.addEventListener('input', calculateRestaPagar);
@@ -1037,26 +1271,62 @@ if (montoPagadoPreRESERVAInput) {
 }
 
 
-// --- Función calculateRestaPagar() ---
 // Esta función ahora considera el nuevo input 'montoPagoHechoInput'
 function calculateRestaPagar() {
     const montoTotalFinal = parseFloat(montoTotalFinalInput.value) || 0;
     const montoPagadoPreReserva = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
-    const montoPagadoActualDisplay = parseFloat(montoPagadoInput.value) || 0; // Valor que se muestra en montoPagadoInput (suma de pagos anteriores)
-    const montoPagoHecho = parseFloat(montoPagoHechoInput.value) || 0; // Nuevo pago adicional
+    const montoPagadoActualDisplay = parseFloat(montoPagadoInput.value) || 0; // Valor que se muestra en montoPagadoInput (suma de pagos anteriores de la definitiva)
+    const montoPagoHecho = parseFloat(montoPagoHechoInput.value) || 0; // Nuevo pago adicional (solo si pagoHechoGroup está visible)
 
-    let totalPagadoAcumulado = 0;
+    let totalPagadoAcumuladoHastaAhora = 0; // Monto total pagado antes de considerar el pago actual/nuevo
+    let campoDePagoActual = null; // Referencia al input donde el usuario introducirá el monto del pago actual
 
-    // Si 'pagoHechoGroup' está visible, montoPagadoInput muestra la suma de los pagos anteriores.
-    // Entonces, el total acumulado es esa suma más el nuevo pago hecho.
+    // Determinar el escenario: ¿Estamos haciendo un pago inicial/conversión o un pago subsiguiente?
     if (pagoHechoGroup.style.display === 'block') {
-        totalPagadoAcumulado = montoPagadoActualDisplay + montoPagoHecho;
+        // Escenario: Pagos subsiguientes a una reserva definitiva ya existente
+        // montoPagadoActualDisplay contiene los pagos definitivos anteriores.
+        // totalPagadoAcumuladoHastaAhora incluye el pago de prereserva + pagos definitivos anteriores.
+        totalPagadoAcumuladoHastaAhora = montoPagadoPreReserva + montoPagadoActualDisplay;
+        campoDePagoActual = montoPagoHechoInput; // El nuevo pago se ingresa aquí
+        montoPagadoInput.setAttribute('readonly', true); // montoPagadoInput es de solo lectura en este escenario
+        montoPagadoInput.style.backgroundColor = '#f0f0f0';
     } else {
-        // Si 'pagoHechoGroup' no está visible (ej. nueva reserva o pago total directo),
-        // montoPagadoInput es el monto principal y se suma al de pre-reserva si aplica.
-        totalPagadoAcumulado = montoPagadoActualDisplay + montoPagadoPreReserva;
+        // Escenario: Conversión de prereserva o pago inicial de una nueva reserva definitiva
+        // totalPagadoAcumuladoHastaAhora es solo el monto de la prereserva.
+        totalPagadoAcumuladoHastaAhora = montoPagadoPreReserva;
+        campoDePagoActual = montoPagadoInput; // El pago se ingresa en montoPagadoInput
+        // La editabilidad de montoPagadoInput se maneja más abajo según tipoPagoSelect
     }
-    
-    const resta = montoTotalFinal - totalPagadoAcumulado;
-    restaPagarInput.value = resta.toFixed(2);
+
+    // Calcular lo que resta pagar ANTES de considerar el pago actual que se está ingresando
+    let restaPagarAntesNuevoPago = montoTotalFinal - totalPagadoAcumuladoHastaAhora;
+
+    // Aplicar lógica según el "Tipo de Pago" seleccionado
+    if (tipoPagoSelect.value === 'Total') {
+        // Si se selecciona 'Total', el campo de pago actual se rellena con la 'restaPagarAntesNuevoPago'
+        if (campoDePagoActual) {
+            campoDePagoActual.value = Math.max(0, restaPagarAntesNuevoPago).toFixed(2); // Asegurar que no sea negativo
+            campoDePagoActual.setAttribute('readonly', true); // Bloquear el campo después de rellenarlo
+            campoDePagoActual.style.backgroundColor = '#f0f0f0';
+        }
+    } else if (tipoPagoSelect.value === 'Parcial') {
+        // Si se selecciona 'Parcial', el campo de pago actual se vuelve editable
+        if (campoDePagoActual) {
+            campoDePagoActual.removeAttribute('readonly');
+            campoDePagoActual.style.backgroundColor = '#fcfcfc';
+        }
+    } else {
+        // Si no se selecciona tipo de pago o es otro valor, el campo es editable por defecto (para el pago inicial)
+        if (campoDePagoActual) {
+            campoDePagoActual.removeAttribute('readonly');
+            campoDePagoActual.style.backgroundColor = '#fcfcfc';
+        }
+    }
+
+    // Calcular el monto total pagado final (sumando el pago de prereserva + pagos definitivos anteriores + el pago actual)
+    let montoDelPagoActual = parseFloat(campoDePagoActual ? campoDePagoActual.value : 0) || 0;
+    let totalPagadoAcumuladoFinal = totalPagadoAcumuladoHastaAhora + montoDelPagoActual;
+
+    // Finalmente, calcular y mostrar la resta a pagar
+    restaPagarInput.value = (montoTotalFinal - totalPagadoAcumuladoFinal).toFixed(2);
 }

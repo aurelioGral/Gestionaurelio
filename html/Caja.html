@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Aurelio Ski - Caja Diaria</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/caja.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">Sistema de Reservas</a>
+            <button class="menu-toggle" aria-label="Abrir menú">&#9776;</button>
+            <ul class="nav-links">
+                <li><a href="../index.html">Formulario</a></li>
+                <li><a href="./Clientes.html">Clientes</a></li>
+                <li><a href="./Vendedores.html">Vendedores</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Clases &#9662;</a>
+                    <div class="dropdown-content">
+                        <a href="./clasespriv.html">Clases Privadas</a>
+                        <a href="./clasesgrup.html">Clases Grupales</a>
+                    </div>
+                </li>
+                <li><a href="./Caja.html" class="active">Caja</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="contenedorTodo">
+        <div class="container">
+            <h1>Cierre de Caja Diario</h1>
+
+            <div class="filters-section">
+                <div class="form-group">
+                    <label for="fechaCajaSelect">Seleccionar Fecha de Ventas:</label>
+                    <select id="fechaCajaSelect">
+                        <option value="">Cargando fechas...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="mainCajaGrid" class="main-caja-grid">
+                <div id="cashRegisterDashboard" class="dashboard">
+                    <p class="empty-message">Seleccione una fecha para ver el resumen de caja.</p>
+                </div>
+
+                <div class="additional-inputs">
+                    <h2>Ajustes de Caja</h2>
+                    <div class="form-group">
+                        <label for="ingresoExtraInput">Ingreso Extra del Día:</label>
+                        <input type="number" id="ingresoExtraInput" value="0" min="0" step="0.01">
+                    </div>
+                    <h3>Gastos del Día:</h3>
+                    <div class="expenses-grid">
+                        <div class="form-group">
+                            <label for="gasto1Input">Gasto 1:</label>
+                            <input type="number" id="gasto1Input" value="0" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="gasto2Input">Gasto 2:</label>
+                            <input type="number" id="gasto2Input" value="0" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="gasto3Input">Gasto 3:</label>
+                            <input type="number" id="gasto3Input" value="0" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="gasto4Input">Gasto 4:</label>
+                            <input type="number" id="gasto4Input" value="0" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="gasto5Input">Gasto 5:</label>
+                            <input type="number" id="gasto5Input" value="0" min="0" step="0.01">
+                        </div>
+                    </div>
+                <DIV class="containerdetotales">
+                    
+                        <div class="form-group total-final-caja">
+                        <label>Total Caja Final (ARS):</label>
+                        <p id="totalFinalCajaARS" class="display-value amount-display"></p>
+                    </div>
+                    <div class="form-group total-final-caja">
+                        <label>Total Efectivo (BRL):</label>
+                        <p id="totalFinalCajaBRL" class="display-value amount-display"></p>
+                    </div>
+                    <div class="form-group total-final-caja">
+                        <label>Total Efectivo (DOLAR):</label>
+                        <p id="totalFinalCajaDOLAR" class="display-value amount-display"></p>
+                    </div>
+                    <div class="form-group total-final-caja">
+    <label>Comisiones Pagadas Hoy (ARS):</label>
+    <p id="totalComisionesPagadas" class="display-value amount-display negative-value"></p>
+</div>
+                    
+
+               
+                 <div class="button-actions">
+                <button id="closeCashRegisterButton" class="commission-button">Cerrar Caja</button>
+            </div>
+              
+                </div>
+            </div>
+                
+            
+            
+        </div>
+
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <p id="modalMessage"></p>
+            </div>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Cargando...</p>
+        </div>
+    </div>
+    
+    <script src="../js/menuybotones.js"></script>
+    <script src="../js/caja.js"></script>
+</body>
+</html>

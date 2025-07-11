@@ -1,0 +1,383 @@
+/* caja.css */
+
+/* Estilos específicos del contenedor (ajustado para caja) */
+.container {
+    margin-top: 30px;
+    background-color:#fdf0d5; /* Color similar al de tus otros contenedores */
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    max-width: 1400px;
+    margin-bottom: 50px;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    color: #003049;
+    margin-bottom: 35px;
+    font-size: 2.5em;
+    font-weight: 600;
+}
+
+h2, h3 {
+    color: #003049;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+/* Sección de filtros */
+.filters-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #e6eef7; /* Un tono más claro para el área de filtro */
+    border-radius: 8px;
+}
+
+.filters-section .form-group {
+    margin: 0 15px;
+    flex-grow: 1;
+    max-width: 300px; /* Limita el ancho del select */
+}
+
+.filters-section label {
+    font-weight: bold;
+    color: #003049;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.filters-section select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.filters-section select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dashboard de caja */
+.dashboard {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin-top: 20px;
+}
+
+.currency-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.currency-section h3 {
+    color: #003049;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.6em;
+    text-align: center;
+    border-bottom: 2px solid #003049;
+    padding-bottom: 10px;
+}
+
+.payment-method-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.payment-method-details .detail-item {
+    background-color: #eef2f7; /* Un color de fondo para cada item de detalle */
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid #d0dbe6;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.payment-method-details .detail-item strong {
+    color: #003049;
+    font-size: 0.95em;
+    margin-bottom: 5px;
+}
+
+.payment-method-details .detail-item .amount-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #34a853; /* Verde para montos positivos */
+}
+
+/* Totales por moneda */
+.currency-total {
+    text-align: right;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #003049;
+}
+
+/* Sección de ajustes adicionales */
+.additional-inputs {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.additional-inputs h2, .additional-inputs h3 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.additional-inputs .form-group {
+    margin-bottom: 15px;
+}
+
+.additional-inputs label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #003049;
+}
+
+.additional-inputs input[type="number"] {
+    width: calc(100% - 22px); /* Ajuste para padding */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.expenses-grid {
+    width: 100%;
+    height: 50%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.total-final-caja {
+    text-align: right;
+    padding-top: 20px;
+    border-top: 2px solid #003049;
+    margin-top: 30px;
+}
+
+.total-final-caja label {
+    font-size: 1.4em;
+    color: #780000;
+    
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.total-final-caja .amount-display {
+    font-size: 1.8em;
+    font-weight: bolder;
+    color: green; /* Rojo para el total final */
+    display: inline-block;
+}
+
+
+/* Botones de acción */
+.button-actions {
+    text-align: center;
+    margin-top: 40px;
+    justify-content: center;
+}
+
+.button-actions .commission-button { /* Reutilizando el estilo del botón de pagar comisión */
+    background-color: #003049; /* Dark blue from your style.css */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+
+}
+
+.button-actions .commission-button:hover {
+    background-color: #002030; /* Darker blue on hover */
+}
+
+/* Mensajes de vacío */
+.empty-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .filters-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters-section .form-group {
+        margin: 10px 0;
+        max-width: 100%;
+    }
+
+    .payment-method-details {
+        grid-template-columns: 1fr; /* Una columna en móviles */
+    }
+
+    .expenses-grid {
+        grid-template-columns: 1fr; /* Una columna en móviles */
+    }
+
+    .total-final-caja label,
+    .total-final-caja .amount-display {
+        font-size: 1.2em;
+    }
+
+    .button-actions .commission-button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+}
+
+/* Nuevo estilo para el contenedor principal de cuadrícula de la caja */
+.main-caja-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Por defecto, una columna para móviles */
+    gap: 30px; /* Espacio entre las secciones (dashboard y ajustes) */
+    margin-top: 20px;
+}
+
+@media (min-width: 992px) { /* Para pantallas más grandes (desktop) */
+    .main-caja-grid {
+        /* Intento de 4 columnas, ajustando para que dashboard principal y ajustes queden a la par */
+        /* Opción 1: Dashboard principal ocupa 2/3 y Ajustes 1/3 */
+        grid-template-columns: 2fr 1fr; 
+        
+        /* Opción 2: Dos columnas de igual tamaño para dashboard y ajustes.
+                   Las secciones de moneda dentro del dashboard principal se autoajustarán.
+        grid-template-columns: 1fr 1fr; */
+    }
+}
+
+/* Ajustes para el dashboard y la sección de ingresos/gastos dentro del grid */
+.dashboard, .additional-inputs {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin-top: 0; /* Elimina el margen superior que tenía para que el grid lo gestione */
+    height: fit-content; /* Ajusta la altura al contenido para que los divs se alineen mejor en el grid */
+}
+    
+
+/* Ajustar el color hover del botón "Cerrar Caja" a bordo */
+.button-actions .commission-button:hover {
+    color:#fafafa; 
+    background-color:#2c86c2;  
+  
+    border: solid,#780000;
+    box-shadow: #003049;
+    transition: 0.5s;/* Un color bordo oscuro, puedes ajustar el hex */
+    /* Puedes usar un color más cercano al rojo que ya usas para totales finales, ej: #b02323; */
+}
+
+/* Asegurar que el botón "Cerrar Caja" esté centrado */
+.button-actions {
+    text-align: center; /* Esto ya estaba, solo para confirmar que es correcto */
+    margin-top: 40px;
+}
+
+/* Reajustar el estilo del total general de ventas para que no se vea como una sección de moneda más */
+.overall-total {
+    background-color: #e0eaf2; /* Un color diferente para el total general */
+    border: 1px solid #c0d8ea;
+    padding: 15px 20px;
+    margin-top: 30px; /* Para separarlo de las secciones de moneda */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.overall-total h3 {
+    color: #003049;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    border-bottom: none; /* No queremos línea debajo de este título */
+    text-align: center;
+}
+
+.overall-total .currency-total {
+    font-size: 2.2em;
+    color: #d62828; /* Mantener el rojo para el total final */
+    text-align: center;
+}
+
+/* Ajustes para el grid de detalles de pago dentro de cada sección de moneda */
+.payment-method-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* 180px para que quepan 2-3 en el espacio del dashboard */
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Hacer los montos más grandes y negrita */
+.payment-method-details .detail-item .amount-display {
+    font-size: 1.4em; /* Aumentado de 1.2em */
+    font-weight: bold;
+    color: #34a853;
+}
+
+/* Ajuste al mensaje de vacío para que se vea bien en el dashboard */
+.dashboard .empty-message {
+    margin-top: 0; /* Ya no necesita margen superior si está dentro del dashboard */
+}
+
+.containerdetotales{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-group.total-final-caja{
+    height: auto;
+    width: auto;
+    align-items: center;
+}

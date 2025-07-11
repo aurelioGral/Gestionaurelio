@@ -222,8 +222,8 @@ h1 {
 }
 
 .tab-button.active {
-    background-color: #c1121f; /* Rojo vibrante para el botón activo */
-    box-shadow: 0 0 12px rgba(193, 18, 31, 0.5); /* Sombra más pronunciada para activo */
+    background-color:#780000; /* Rojo vibrante para el botón activo */
+    box-shadow: 0 0 12px rgba(8, 8, 8, 0.5); /* Sombra más pronunciada para activo */
     transform: translateY(-2px);
 }
 
@@ -327,13 +327,45 @@ h1 {
 
 .stat-value {
     font-weight: bold;
-    color: #c1121f; /* Rojo principal */
-    background-color: #ffe8e8; /* Fondo suave para valores */
+    color: #000000; /* NEGRO principal */
+    background-color: #fdf0d5;; /* Fondo suave para valores */
     padding: 4px 8px;
     border-radius: 4px;
     min-width: 60px; /* Para alinear visualmente */
     text-align: center;
 }
+
+.stat-valueMF{
+     font-weight: bold;
+    color:rgb(175, 108, 238) ; /* Rojo principal */
+    background-color: #fdf0d5;; /* Fondo suave para valores */
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: solid,black,1px;
+   
+    min-width: 60px; /* Para alinear visualmente */
+    text-align: center;
+}
+.stat-valueRP{
+     font-weight: bold;
+    color:red ; /* Rojo principal */
+    background-color: #fdf0d5;; /* Fondo suave para valores */
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 60px; /* Para alinear visualmente */
+    text-align: center;
+}
+
+.stat-valueMP{
+     font-weight: bold;
+    color: #004916; /* VERDE principal */
+    background-color: #fdf0d5;; /* Fondo suave para valores */
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 60px; /* Para alinear visualmente */
+    text-align: center;
+}
+
 
 /* Indicadores de progreso/estado */
 .progress-bar-container {
@@ -385,7 +417,7 @@ h1 {
 
 .pax-days-status {
     font-weight: bold;
-    color: #003049; /* Azul oscuro para los días */
+    color: #004916; /* VERDE oscuro para los días */
     margin-top: 5px;
     padding: 5px 0;
     border-top: 1px dotted #eee;

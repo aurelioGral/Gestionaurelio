@@ -57,22 +57,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayReservations(type) {
         reservationsGrid.innerHTML = ''; // Limpiar contenedor
 
-        let reservationsToDisplay = [];
-        if (type === 'active') {
-            reservationsToDisplay = allReservations.filter(res => !res.RESERVA_TERMINADA);
-            activeReservationsBtn.classList.add('active');
-            finishedReservationsBtn.classList.remove('active');
-        } else if (type === 'finished') {
-            reservationsToDisplay = allReservations.filter(res => res.RESERVA_TERMINADA);
-            activeReservationsBtn.classList.remove('active');
-            finishedReservationsBtn.classList.add('active');
-        }
+         let reservationsToDisplay = [];
+    if (type === 'active') {
+        // Las reservas activas son aquellas donde RESERVA_TERMINADA NO es "TRUE"
+        reservationsToDisplay = allReservations.filter(res => res.RESERVAS_TERMINADA !== "TRUE");
+        activeReservationsBtn.classList.add('active');
+        finishedReservationsBtn.classList.remove('active');
+    } else if (type === 'finished') {
+        // Las reservas terminadas son aquellas donde RESERVA_TERMINADA SÍ es "TRUE"
+        reservationsToDisplay = allReservations.filter(res => res.RESERVAS_TERMINADA === "TRUE");
+        activeReservationsBtn.classList.remove('active');
+        finishedReservationsBtn.classList.add('active');
+    }
 
-        if (reservationsToDisplay.length === 0) {
-            const message = type === 'active' ? 'No hay reservas activas en este momento.' : 'No hay reservas terminadas.';
-            reservationsGrid.innerHTML = `<p class="empty-message">${message}</p>`;
-            return;
-        }
+    if (reservationsToDisplay.length === 0) {
+        const message = type === 'active' ? 'No hay reservas activas en este momento.' : 'No hay reservas terminadas.';
+        reservationsGrid.innerHTML = `<p class="empty-message">${message}</p>`;
+        return;
+    }
 
         reservationsToDisplay.forEach(res => {
             const reservationCard = document.createElement('div');
@@ -81,19 +83,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Determine if the card header should be for active or finished
             const headerClass = type === 'active' ? 'active-res' : 'finished-res';
             
-            // Placeholder for profile picture (can be dynamic if you add a column for it)
-            const profilePicUrl = 'https://via.placeholder.com/60/669bbc/FFFFFF?text=P'; // Default placeholder
 
             // Card Header
-            reservationCard.innerHTML += `
-                <div class="card-header ${headerClass}">
-                    
-                    <div class="client-details">
-                        <h3>Reserva #${res.NRESERVA || 'N/A'} - ${res.NOMBRE_COMPLETO || 'N/A'}</h3>
-                        <p>Fecha: ${res.FECHA || 'N/A'} | Días Totales: ${res.DIAS || 'N/A'} | Vendedor: ${res.VENDEDOR || 'N/A'}</p>
-                    </div>
-                </div>
-            `;
+reservationCard.innerHTML += `
+    <div class="card-header ${headerClass}">
+        <div class="client-details">
+            <h3>Reserva #${res.NRESERVA || 'N/A'} - ${res.NOMBRE_COMPLETO || 'N/A'}</h3>
+            <p>Fecha: ${formatDateToDDMMAA(res.FECHA)} | Días Totales: ${res.DIAS || 'N/A'} | Vendedor: ${res.VENDEDOR || 'N/A'}</p>
+        </div>
+    </div>
+`;
 
             const cardContent = document.createElement('div');
             cardContent.classList.add('card-content');
@@ -115,19 +114,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Monto Total Final:</span>
-                        <span class="stat-value">$${(res.MONTO_TOTAL_FINAL || 0).toLocaleString('es-AR')}</span>
+                        <span class="stat-valueMF">$${(res.MONTO_TOTAL_FINAL || 0).toLocaleString('es-AR')}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">${res.SI_PAGO_TOTAL ? 'Pago Completo' : 'Monto Pagado'}:</span>
-                        <span class="stat-value">$${(res.MONTO_PAGADOESTADO || 0).toLocaleString('es-AR')}</span>
+                        <span class="stat-valueMP">$${(res.MONTO_PAGADO || 0).toLocaleString('es-AR')}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Resta Pagar:</span>
-                        <span class="stat-value">$${(res.RESTA_PAGAR || 0).toLocaleString('es-AR')}</span>
+                        <span class="stat-valueRP" >$${(res.RESTA_PAGAR || 0).toLocaleString('es-AR')}</span>
+                    </div>
+                     <div class="stat-item">
+                        <span class="stat-label">Moneda:</span>
+                        <span class="stat-value">${res.TIPO_DE_MONEDA || "N/A"}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Método de Pago:</span>
-                        <span class="stat-value">${res.METODO_DE_PAGO || 'N/A'}</span>
+                        <span class="stat-value">${res.METODO_DE_PAGO || res.METODO_DE_PAGO_REAL||res.METODO_DE_PAGO_DOLAR}</span>
                     </div>
                 </div>
             `;
@@ -187,3 +190,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function formatDateToDDMMAA(dateString) {
+    if (!dateString) {
+        return 'N/A';
+    }
+    const date = new Date(dateString);
+    
+    // Verifica si la fecha es válida
+    if (isNaN(date.getTime())) {
+        return 'Fecha inválida'; // O puedes devolver 'N/A' o el formato original si falla la conversión
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+    const year = String(date.getFullYear()).slice(-2); // Obtiene los últimos dos dígitos del año
+
+    return `${day}/${month}/${year}`;
+}
