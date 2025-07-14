@@ -48,6 +48,15 @@ const estadoPreReservaHidden = document.getElementById('estadoPreReservaHidden')
 const montoPagoHechoInput = document.getElementById('montoPagoHecho');
 const pagoHechoGroup = document.getElementById('pagoHechoGroup'); // El contenedor del nuevo input
 
+// --- Elementos del DOM para el Contador de Días ---
+    const reservaDiasContadorInput = document.getElementById('reservaDiasContador');
+    const paxNumeroDiasInput = document.getElementById('paxNumeroDias');
+    const btnSumarDiaPax = document.getElementById('btnSumarDiaPax');
+    const sumarDiaATodosPaxCheckbox = document.getElementById('sumarDiaATodosPax');
+    const btnSumarDiaTodos = document.getElementById('btnSumarDiaTodos');
+    const dayCounterMessage = document.getElementById('dayCounterMessage');
+
+
 
 const selectOptions = {
     TABLAS: [
@@ -105,10 +114,15 @@ const selectOptions = {
 };
 
 // --- Funciones para el Loading Overlay ---
-function showLoading() {
-    loadingOverlay.classList.add('show');
-}
-
+ function showLoadingOverlay(show) {
+        if (loadingOverlay) {
+            if (show) {
+                loadingOverlay.classList.add('show');
+            } else {
+               loadingOverlay.classList.remove('show');
+            }
+        }
+    }
 function hideLoading() {
     loadingOverlay.classList.remove('show');
 }
@@ -165,7 +179,7 @@ function showMessage(message, type) {
  * @returns {Promise<Object>} - La respuesta del backend.
  */
 async function callAppsScript(action, payload = {}) {
-    showLoading(); // <--- Mostrar el loading antes de la llamada
+    showLoadingOverlay(); // <--- Mostrar el loading antes de la llamada
     try {
         const response = await fetch(APPS_SCRIPT_WEB_APP_URL, {
             method: 'POST',
@@ -240,6 +254,70 @@ function generatePasajeroRows(count) {
     addPaxInputChangeListeners(); // Añadir listeners para los cálculos
     calculateTotals(); // Recalcular totales cada vez que se regeneran las filas
 }
+
+
+ // --- Funciones para el Contador de Días ---
+
+    /**
+     * Muestra un mensaje en la sección del contador de días.
+     * @param {string} message - El mensaje a mostrar.
+     * @param {boolean} isSuccess - True si es un mensaje de éxito, false para error.
+     */
+    function showDayCounterMessage(message, isSuccess) {
+        dayCounterMessage.textContent = message;
+        dayCounterMessage.className = `message-display ${isSuccess ? 'success' : 'error'}`;
+        setTimeout(() => {
+            dayCounterMessage.textContent = '';
+            dayCounterMessage.className = 'message-display';
+        }, 5000); // El mensaje desaparece después de 5 segundos
+    }
+
+    /**
+     * Envía la solicitud al backend para actualizar los días cumplidos.
+     * @param {string} reservaId - El ID de la reserva.
+     * @param {number | null} paxNumber - El número de pax específico (1-15) o null si es para todos.
+     */
+    async function updateDiasCumplidos(reservaId, paxNumber = null) {
+        if (!reservaId) {
+            showDayCounterMessage('Por favor, ingrese un número de reserva.', false);
+            return;
+        }
+
+        showLoadingOverlay(true);
+        dayCounterMessage.textContent = ''; // Limpiar mensaje anterior
+
+        try {
+            const payload = {
+                reservaId: reservaId,
+                paxNumber: paxNumber // Será un número (1-15) o null
+            };
+
+            const response = await fetch(APPS_SCRIPT_WEB_APP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify({ action: 'updateDiasCumplidos', payload: payload }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showDayCounterMessage(data.message, true);
+                // Opcional: limpiar inputs después de éxito
+                reservaDiasContadorInput.value = '';
+                paxNumeroDiasInput.value = '';
+                sumarDiaATodosPaxCheckbox.checked = false;
+            } else {
+                showDayCounterMessage(data.message || 'Error al actualizar días cumplidos.', false);
+            }
+        } catch (error) {
+            console.error('Error al enviar datos de días cumplidos:', error);
+            showDayCounterMessage('Error de conexión al actualizar días cumplidos. Intente de nuevo.', false);
+        } finally {
+            showLoadingOverlay(false);
+        }
+    }
 
 /**
  * Llena un elemento <select> con opciones.
@@ -1255,6 +1333,36 @@ async function getNextReservaIdAndPopulate() {
         console.error('No se pudo obtener el siguiente ID de reserva:', response.message);
     }
 }
+
+
+// --- Event Listeners para el Contador de Días ---
+
+    btnSumarDiaPax.addEventListener('click', () => {
+        const reservaId = reservaDiasContadorInput.value.trim();
+        const paxNumber = parseInt(paxNumeroDiasInput.value, 10);
+
+        if (isNaN(paxNumber) || paxNumber < 1 || paxNumber > 15) {
+            showDayCounterMessage('Por favor, ingrese un número de Pax válido (1-15).', false);
+            return;
+        }
+        updateDiasCumplidos(reservaId, paxNumber);
+    });
+
+    btnSumarDiaTodos.addEventListener('click', () => {
+        const reservaId = reservaDiasContadorInput.value.trim();
+        if (sumarDiaATodosPaxCheckbox.checked) {
+            updateDiasCumplidos(reservaId, null); // null indica que es para todos los pax
+        } else {
+            showDayCounterMessage('Por favor, tilde el checkbox "Sumar Día a TODOS los Pax de la Reserva" para esta acción.', false);
+        }
+    });
+
+    // Controlar el estado del botón "Sumar Día a Todos" basado en el checkbox
+    sumarDiaATodosPaxCheckbox.addEventListener('change', () => {
+        btnSumarDiaTodos.disabled = !sumarDiaATodosPaxCheckbox.checked;
+    });
+    // Inicialmente deshabilitar el botón si el checkbox no está marcado al cargar la página
+    btnSumarDiaTodos.disabled = !sumarDiaATodosPaxCheckbox.checked;
 
 // Listener para el tipo de pago (Total/Parcial)
 

@@ -188,7 +188,9 @@
     <div class="spinner"></div>
     <p>Cargando...</p>
 </div>
-    </div> <div class="form-section">
+    </div> 
+    <div class="contenedorcontadorypre">
+    <div class="form-section">
             <h2> Pre-reservas</h2>
             <div class="form-group">
                 <label for="preReservaDateSelect">Seleccionar Fecha de Pre-reserva:</label>
@@ -201,6 +203,25 @@
                 <p>Seleccione una fecha para ver las pre-reservas.</p>
             </div>
         </div>
+        <div class="container day-counter-section">
+        <h2>Contador de Días Cumplidos</h2>
+        <div class="form-group">
+            <label for="reservaDiasContador">Número de Reserva:</label>
+            <input type="text" id="reservaDiasContador" placeholder="Ej: R12345">
+        </div>
+        <div class="form-group">
+            <label for="paxNumeroDias">Número de Pax Específico (1-15):</label>
+            <input type="number" id="paxNumeroDias" min="1" max="15" placeholder="Ej: 2">
+            <button id="btnSumarDiaPax">Sumar Día a Pax Específico</button>
+        </div>
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="sumarDiaATodosPax">
+            <label for="sumarDiaATodosPax">Sumar Día a TODOS los Pax de la Reserva</label>
+            <button id="btnSumarDiaTodos">Sumar Día a Todos</button>
+        </div>
+        <div id="dayCounterMessage" class="message-display"></div>
+    </div>
+    </div>
 </div>
     <script src="./js/script.js"></script>
     <script src="./js/menuybotones.js"></script>

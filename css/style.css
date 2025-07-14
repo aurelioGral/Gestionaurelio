@@ -582,7 +582,7 @@ button:hover {
 }
 .form-section{
     margin: 8px;
-    width: 30%;
+    width: auto;
     padding: 8px;
     background-color: #fdf0d5;
     border-radius: 16px;
@@ -661,4 +661,136 @@ button:hover {
 .pre-reservas-table input[type="checkbox"] {
     transform: scale(1.3); /* Hace el checkbox un poco más grande */
     margin-right: 5px;
+}
+
+.contenedorcontadorypre{
+    height: auto;
+    width: auto;
+    padding: 8px;
+}
+
+/* Estilos para la nueva sección del Contador de Días */
+.day-counter-section {
+    width: auto;
+    height: auto;
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #fdf0d5; /* Mismo color de fondo que otros contenedores */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.day-counter-section h2 {
+    text-align: center;
+    color: #003049;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.day-counter-section .form-group {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 10px; /* Espacio entre elementos en una fila */
+
+}
+
+
+.day-counter-section label {
+    
+    
+    min-width: 120px; /* Mínimo para que no se compriman demasiado */
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 5px; /* Espacio debajo de la etiqueta en pantallas pequeñas */
+}
+
+.day-counter-section input[type="text"],
+.day-counter-section input[type="number"] {
+    flex-grow: 1; /* Permite que el input crezca */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    max-width: 250px; /* Limita el ancho máximo del input */
+}
+
+.day-counter-section button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0; /* Evita que el botón se comprima */
+}
+
+.day-counter-section button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.day-counter-section button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.day-counter-section .checkbox-group {
+    align-items: center;
+    margin-top: 20px;
+}
+
+.day-counter-section .checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.day-counter-section .message-display {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    min-height: 20px; /* Para mantener espacio incluso cuando está vacío */
+}
+
+.message-display.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-display.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .day-counter-section .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .day-counter-section label {
+        flex-basis: auto;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .day-counter-section input[type="text"],
+    .day-counter-section input[type="number"],
+    .day-counter-section button {
+        width: 100%;
+        max-width: none; /* Permitir que ocupe todo el ancho disponible */
+    }
+    .day-counter-section .checkbox-group {
+        flex-direction: row; /* Mantener en fila si es posible */
+        justify-content: flex-start;
+        align-items: center;
+    }
 }

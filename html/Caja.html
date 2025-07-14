@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Aurelio Ski - Caja Diaria</title>
+    <title>Caja - Sistema Aurelio Ski</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/caja.css">
-</head>
+    <link rel="stylesheet" href="../css/clientes.css"> <link rel="stylesheet" href="../css/vendedore.css"> <link rel="stylesheet" href="../css/caja.css"> </head>
 <body>
     <nav class="navbar">
         <div class="navbar-container">
@@ -14,111 +13,152 @@
             <button class="menu-toggle" aria-label="Abrir menú">&#9776;</button>
             <ul class="nav-links">
                 <li><a href="../index.html">Formulario</a></li>
-                <li><a href="./Clientes.html">Clientes</a></li>
-                <li><a href="./Vendedores.html">Vendedores</a></li>
+                <li><a href="Clientes.html">Clientes</a></li>
+                <li><a href="Vendedores.html">Vendedores</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Clases &#9662;</a>
                     <div class="dropdown-content">
-                        <a href="./clasespriv.html">Clases Privadas</a>
-                        <a href="./clasesgrup.html">Clases Grupales</a>
+                        <a href="clasespriv.html">Clases Privadas</a>
+                        <a href="clasesgrup.html">Clases Grupales</a>
                     </div>
                 </li>
-                <li><a href="./Caja.html" class="active">Caja</a></li>
+                <li><a href="Caja.html" class="active">Caja</a></li>
             </ul>
         </div>
     </nav>
+
     <div class="contenedorTodo">
         <div class="container">
-            <h1>Cierre de Caja Diario</h1>
+            <h1>Gestión de Caja</h1>
 
-            <div class="filters-section">
-                <div class="form-group">
-                    <label for="fechaCajaSelect">Seleccionar Fecha de Ventas:</label>
-                    <select id="fechaCajaSelect">
-                        <option value="">Cargando fechas...</option>
-                    </select>
+            <div class="form-group">
+                <label for="fechaCajaSelect">Seleccionar Fecha de Caja:</label>
+                <select id="fechaCajaSelect">
+                    <option value="">Cargando fechas...</option>
+                </select>
+            </div>
+
+            <div class="dashboard-grid" id="dashboardGrid">
+                <div class="dashboard-card income-ars">
+                    <h3>Ingresos Pesos ARS</h3>
+                    <p>Efectivo: <span id="ingresoEfectivoARS">0.00</span> ARS</p>
+                    <p>Tarjeta Crédito: <span id="ingresoTarjetaCreditoARS">0.00</span> ARS</p>
+                    <p>Tarjeta Débito: <span id="ingresoTarjetaDebitoARS">0.00</span> ARS</p>
+                    <p>Transferencia: <span id="ingresoTransferenciaARS">0.00</span> ARS</p>
+                    <hr>
+                    <p class="total">Total ARS: <span id="totalIngresosARS">0.00</span> ARS</p>
+                </div>
+
+                <div class="dashboard-card income-brl">
+                    <h3>Ingresos Real BRL</h3>
+                    <p>Efectivo: <span id="ingresoEfectivoBRL">0.00</span> BRL</p>
+                    <p>Tarjeta Crédito: <span id="ingresoTarjetaCreditoBRL">0.00</span> BRL</p>
+                    <p>Tarjeta Débito: <span id="ingresoTarjetaDebitoBRL">0.00</span> BRL</p>
+                    <p>Transferencia: <span id="ingresoTransferenciaBRL">0.00</span> BRL</p>
+                    <hr>
+                    <p class="total">Total BRL: <span id="totalIngresosBRL">0.00</span> BRL</p>
+                </div>
+
+                <div class="dashboard-card income-usd">
+                    <h3>Ingresos Dolar USA</h3>
+                    <p>Efectivo: <span id="ingresoEfectivoUSD">0.00</span> USD</p>
+                    <p>Tarjeta Crédito: <span id="ingresoTarjetaCreditoUSD">0.00</span> USD</p>
+                    <p>Tarjeta Débito: <span id="ingresoTarjetaDebitoUSD">0.00</span> USD</p>
+                    <p>Transferencia: <span id="ingresoTransferenciaUSD">0.00</span> USD</p>
+                    <hr>
+                    <p class="total">Total USD: <span id="totalIngresosUSD">0.00</span> USD</p>
+                </div>
+
+                <div class="dashboard-card commissions">
+                    <h3>Comisiones Pagadas</h3>
+                    <p class="total">Total Comisiones: <span id="totalComisiones">0.00</span> ARS</p>
                 </div>
             </div>
 
-            <div id="mainCajaGrid" class="main-caja-grid">
-                <div id="cashRegisterDashboard" class="dashboard">
-                    <p class="empty-message">Seleccione una fecha para ver el resumen de caja.</p>
+            <hr>
+
+            <div class="expenses-section">
+                <h2>Otros Movimientos</h2>
+                <div class="form-group-inline">
+                    <label for="ingresoExtraDetalle">Ingreso Extra (ARS):</label>
+                    <input type="text" id="ingresoExtraDetalle" placeholder="Detalle">
+                    <input type="number" id="ingresoExtraMonto" value="0.00" min="0" step="0.01">
                 </div>
 
-                <div class="additional-inputs">
-                    <h2>Ajustes de Caja</h2>
-                    <div class="form-group">
-                        <label for="ingresoExtraInput">Ingreso Extra del Día:</label>
-                        <input type="number" id="ingresoExtraInput" value="0" min="0" step="0.01">
-                    </div>
-                    <h3>Gastos del Día:</h3>
-                    <div class="expenses-grid">
-                        <div class="form-group">
-                            <label for="gasto1Input">Gasto 1:</label>
-                            <input type="number" id="gasto1Input" value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="gasto2Input">Gasto 2:</label>
-                            <input type="number" id="gasto2Input" value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="gasto3Input">Gasto 3:</label>
-                            <input type="number" id="gasto3Input" value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="gasto4Input">Gasto 4:</label>
-                            <input type="number" id="gasto4Input" value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="gasto5Input">Gasto 5:</label>
-                            <input type="number" id="gasto5Input" value="0" min="0" step="0.01">
-                        </div>
-                    </div>
-                <DIV class="containerdetotales">
-                    
-                        <div class="form-group total-final-caja">
-                        <label>Total Caja Final (ARS):</label>
-                        <p id="totalFinalCajaARS" class="display-value amount-display"></p>
-                    </div>
-                    <div class="form-group total-final-caja">
-                        <label>Total Efectivo (BRL):</label>
-                        <p id="totalFinalCajaBRL" class="display-value amount-display"></p>
-                    </div>
-                    <div class="form-group total-final-caja">
-                        <label>Total Efectivo (DOLAR):</label>
-                        <p id="totalFinalCajaDOLAR" class="display-value amount-display"></p>
-                    </div>
-                    <div class="form-group total-final-caja">
-    <label>Comisiones Pagadas Hoy (ARS):</label>
-    <p id="totalComisionesPagadas" class="display-value amount-display negative-value"></p>
-</div>
-                    
+                <h3>Gastos en Pesos ARS</h3>
+                <div class="form-group-inline">
+                    <label for="gasto1ARSEdetalle">Gasto 1 ARS:</label>
+                    <input type="text" id="gasto1ARSEdetalle" placeholder="Detalle Gasto 1 ARS">
+                    <input type="number" id="gasto1ARSmonto" value="0.00" min="0" step="0.01">
+                </div>
+                <div class="form-group-inline">
+                    <label for="gasto2ARSEdetalle">Gasto 2 ARS:</label>
+                    <input type="text" id="gasto2ARSEdetalle" placeholder="Detalle Gasto 2 ARS">
+                    <input type="number" id="gasto2ARSmonto" value="0.00" min="0" step="0.01">
+                </div>
+                <div class="form-group-inline">
+                    <label for="gasto3ARSEdetalle">Gasto 3 ARS:</label>
+                    <input type="text" id="gasto3ARSEdetalle" placeholder="Detalle Gasto 3 ARS">
+                    <input type="number" id="gasto3ARSmonto" value="0.00" min="0" step="0.01">
+                </div>
 
-               
-                 <div class="button-actions">
-                <button id="closeCashRegisterButton" class="commission-button">Cerrar Caja</button>
-            </div>
-              
+                <h3>Gastos en Dólar USA</h3>
+                <div class="form-group-inline">
+                    <label for="gasto4USDdetalle">Gasto 1 USD:</label>
+                    <input type="text" id="gasto4USDdetalle" placeholder="Detalle Gasto 1 USD">
+                    <input type="number" id="gasto4USDMonto" value="0.00" min="0" step="0.01">
+                </div>
+                <div class="form-group-inline">
+                    <label for="gasto5USDdetalle">Gasto 2 USD:</label>
+                    <input type="text" id="gasto5USDdetalle" placeholder="Detalle Gasto 2 USD">
+                    <input type="number" id="gasto5USDMonto" value="0.00" min="0" step="0.01">
                 </div>
             </div>
-                
-            
-            
-        </div>
 
-        <div id="messageModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <p id="modalMessage"></p>
+            <hr>
+
+            <div class="final-summary">
+                <h2>Resumen Final de Caja</h2>
+                <p>Ingresos en Pesos (Neto): <span id="finalIngresosARS">0.00</span> ARS</p>
+                <p>Ingresos en Reales: <span id="finalIngresosBRL">0.00</span> BRL</p>
+                <p>Ingresos en Dólares (Neto): <span id="finalIngresosUSD">0.00</span> USD</p>
+                <p>Pago de Comisiones: <span id="finalPagoComisiones">0.00</span> ARS</p>
+                <p>Gastos en Pesos: <span id="finalGastosARS">0.00</span> ARS</p>
+                <p>Gastos en USD: <span id="finalGastosUSD">0.00</span> USD</p>
+                <hr>
+                <p class="total">Monto Total Final Pesos: <span id="montoTotalFinalARS">0.00</span> ARS</p>
+                <p class="total">Monto Total Final Reales: <span id="montoTotalFinalBRL">0.00</span> BRL</p>
+                <p class="total">Monto Total Final Dólares: <span id="montoTotalFinalUSD">0.00</span> USD</p>
             </div>
-        </div>
 
-        <div id="loadingOverlay" class="loading-overlay">
-            <div class="spinner"></div>
-            <p>Cargando...</p>
+            <div class="button-actions">
+                <button id="btnCierreCaja">Cierre de Caja</button>
+            </div>
+
+            <hr>
+
+            <div class="last-closures-section">
+                <h2>Últimos Cierres de Caja</h2>
+                <div id="lastClosuresGrid" class="reservations-grid">
+                    <p class="empty-message">No hay cierres de caja recientes.</p>
+                    </div>
+            </div>
+
+            <div id="messageModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <p id="modalMessage"></p>
+                </div>
+            </div>
+
+            <div id="loadingOverlay" class="loading-overlay">
+                <div class="spinner"></div>
+                <p>Cargando...</p>
+            </div>
+
         </div>
     </div>
-    
+
     <script src="../js/menuybotones.js"></script>
     <script src="../js/caja.js"></script>
 </body>
