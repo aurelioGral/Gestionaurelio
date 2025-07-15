@@ -35,7 +35,7 @@ const btnCargar = document.getElementById('btnCargar');
 const messageModal = document.getElementById('messageModal');
 const modalMessage = document.getElementById('modalMessage');
 const closeButton = document.querySelector('.close-button');
-const loadingOverlay = document.getElementById('loadingOverlay');
+let loadingOverlay;
 const tipoDeCambioGroup = document.getElementById('tipoDeCambioGroup');
 const tipoDeCambioInput = document.getElementById('tipoDeCambio');
 
@@ -113,19 +113,19 @@ const selectOptions = {
     ]
 };
 
-// --- Funciones para el Loading Overlay ---
- function showLoadingOverlay(show) {
+function showLoadingOverlay(show) {
         if (loadingOverlay) {
+           
             if (show) {
                 loadingOverlay.classList.add('show');
             } else {
-               loadingOverlay.classList.remove('show');
+                loadingOverlay.classList.remove('show');
             }
+        } else {
+          
         }
     }
-function hideLoading() {
-    loadingOverlay.classList.remove('show');
-}
+
 
 // --- Funciones de Utilidad ---
 
@@ -179,7 +179,7 @@ function showMessage(message, type) {
  * @returns {Promise<Object>} - La respuesta del backend.
  */
 async function callAppsScript(action, payload = {}) {
-    showLoadingOverlay(); // <--- Mostrar el loading antes de la llamada
+    showLoadingOverlay(true); // <--- Mostrar el loading antes de la llamada
     try {
         const response = await fetch(APPS_SCRIPT_WEB_APP_URL, {
             method: 'POST',
@@ -197,7 +197,7 @@ async function callAppsScript(action, payload = {}) {
         showMessage(`Error de comunicación con el servidor: ${error.message}`, 'error');
         return { success: false, message: 'Error de red o servidor.' };
     } finally {
-        hideLoading(); // <--- Ocultar el loading SIEMPRE al finalizar (éxito o error)
+        showLoadingOverlay(false); // <--- Ocultar el loading SIEMPRE al finalizar (éxito o error)
     }
 }
 
@@ -283,7 +283,7 @@ function generatePasajeroRows(count) {
             return;
         }
 
-        showLoadingOverlay(true);
+        
         dayCounterMessage.textContent = ''; // Limpiar mensaje anterior
 
         try {
@@ -315,7 +315,7 @@ function generatePasajeroRows(count) {
             console.error('Error al enviar datos de días cumplidos:', error);
             showDayCounterMessage('Error de conexión al actualizar días cumplidos. Intente de nuevo.', false);
         } finally {
-            showLoadingOverlay(false);
+            
         }
     }
 
@@ -1132,6 +1132,8 @@ async function loadPreReservaIntoForm(idPreReserva) {
 
 // Al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
+
+    loadingOverlay = document.getElementById('loadingOverlay');
     fechaInput.value = new Date().toLocaleDateString('es-AR');
     populatePreReservaDates();
 
@@ -1231,6 +1233,7 @@ btnBuscarPreReserva.addEventListener('click', async () => {
 
 // Botón Buscar Reserva
 btnBuscarReserva.addEventListener('click', async () => {
+       
     const id = inputBuscarReserva.value.trim();
     if (!id) {
         showMessage('Por favor, ingrese un N° de Reserva para buscar.', 'error');
@@ -1249,15 +1252,17 @@ btnBuscarReserva.addEventListener('click', async () => {
         showMessage(response.message, 'error');
         clearForm();
     }
+    
 });
 
 // Botón Cargar (Crear nueva Reserva)
 btnCargar.addEventListener('click', async () => {
+    
     const formData = getFormData();
     if (!formData.NOMBRE_COMPLETO || !formData.CANTIDAD_PASAJEROS || parseInt(formData.CANTIDAD_PASAJEROS) < 1) {
         showMessage('Por favor, complete al menos Nombre Completo y Cantidad de Pasajeros.', 'error');
         return;
-    }
+    } 
 
     const response = await callAppsScript('addReserva', formData);
     if (response.success) {
@@ -1270,16 +1275,18 @@ btnCargar.addEventListener('click', async () => {
     } else {
         showMessage(response.message, 'error');
     }
+   
 });
 
 // Botón Actualizar
 btnActualizar.addEventListener('click', async () => {
+    
     const formData = getFormData();
     if (!formData.NRESERVA || parseInt(formData.NRESERVA) === 0 || formData.NRESERVA === 'Error') {
         showMessage('No hay N° de Reserva válido para actualizar. Cargue o busque una reserva primero.', 'error');
         return;
     }
-
+ 
     const response = await callAppsScript('updateReserva', formData);
     if (response.success) {
         showMessage('Reserva actualizada con éxito.', 'success');
@@ -1291,10 +1298,12 @@ btnActualizar.addEventListener('click', async () => {
     } else {
         showMessage(response.message, 'error');
     }
+    
 });
 
 // Botón Eliminar
 btnEliminar.addEventListener('click', async () => {
+  
     const nReservaToDelete = nReservaInput.value.trim();
 
     if (!nReservaToDelete || parseInt(nReservaToDelete) === 0 || nReservaToDelete === 'Error') {
@@ -1321,6 +1330,7 @@ btnEliminar.addEventListener('click', async () => {
     } else {
         showMessage(response.message, 'error');
     }
+    
 });
 
 // Y también para getNextReservaIdAndPopulate, ya que también hace una llamada
@@ -1338,6 +1348,7 @@ async function getNextReservaIdAndPopulate() {
 // --- Event Listeners para el Contador de Días ---
 
     btnSumarDiaPax.addEventListener('click', () => {
+         
         const reservaId = reservaDiasContadorInput.value.trim();
         const paxNumber = parseInt(paxNumeroDiasInput.value, 10);
 
@@ -1349,12 +1360,14 @@ async function getNextReservaIdAndPopulate() {
     });
 
     btnSumarDiaTodos.addEventListener('click', () => {
+         
         const reservaId = reservaDiasContadorInput.value.trim();
         if (sumarDiaATodosPaxCheckbox.checked) {
             updateDiasCumplidos(reservaId, null); // null indica que es para todos los pax
         } else {
             showDayCounterMessage('Por favor, tilde el checkbox "Sumar Día a TODOS los Pax de la Reserva" para esta acción.', false);
         }
+        
     });
 
     // Controlar el estado del botón "Sumar Día a Todos" basado en el checkbox
