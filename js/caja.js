@@ -224,17 +224,17 @@ document.addEventListener('DOMContentLoaded', () => {
         finalPagoComisiones.textContent = resetValue;
 
         // Resetear inputs de gastos e ingresos extra
-        ingresoExtraMonto.value = '0.00';
+        ingresoExtraMonto.value = '';
         ingresoExtraDetalle.value = '';
-        gasto1ARSmonto.value = '0.00';
+        gasto1ARSmonto.value = '';
         gasto1ARSEdetalle.value = '';
-        gasto2ARSmonto.value = '0.00';
+        gasto2ARSmonto.value = '';
         gasto2ARSEdetalle.value = '';
-        gasto3ARSmonto.value = '0.00';
+        gasto3ARSmonto.value = '';
         gasto3ARSEdetalle.value = '';
-        gasto4USDMonto.value = '0.00';
+        gasto4USDMonto.value = '';
         gasto4USDdetalle.value = '';
-        gasto5USDMonto.value = '0.00';
+        gasto5USDMonto.value = '';
         gasto5USDdetalle.value = '';
 
         currentCajaData = {

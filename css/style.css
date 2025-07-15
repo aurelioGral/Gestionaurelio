@@ -534,39 +534,43 @@ button:hover {
     display: block; /* Muestra el dropdown cuando esta clase está presente */
 }
 
-/* --- Loading Overlay Styles --- */
-.loading-overlay {
-    position: fixed;
+/* Estilos para el Overlay de Carga */
+#loadingOverlay {
+    display: flex; /* Usar flexbox para centrar contenido */
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Posicionamiento fijo para cubrir toda la ventana */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente oscuro */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 1.2em;
-    z-index: 9999; /* Asegura que esté por encima de todo */
-    visibility: hidden; /* Oculto por defecto */
-    opacity: 0;
-    transition: visibility 0s, opacity 0.3s linear;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente oscuro */
+    z-index: 9999; /* Asegura que esté por encima de todos los demás elementos */
+    opacity: 0; /* Inicialmente invisible */
+    visibility: hidden; /* Oculto completamente para no afectar interacciones */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
 }
 
-.loading-overlay.show {
-    visibility: visible;
-    opacity: 1;
+/* Clase para mostrar el Overlay */
+#loadingOverlay.show {
+    opacity: 1; /* Hacerlo visible */
+    visibility: visible; /* Mostrarlo */
 }
 
+/* Opcional: Estilos para un spinner de carga dentro del overlay */
 .spinner {
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid #3498db; /* Blue */
-    border-radius: 50%;
+    border: 8px solid #f3f3f3; /* Color claro del círculo exterior */
+    border-top: 8px solid #3498db; /* Color del borde superior (azul) */
+    border-radius: 50%; /* Forma circular */
     width: 60px;
     height: 60px;
     animation: spin 1s linear infinite; /* Animación de giro */
-    margin-bottom: 15px;
+}
+
+/* Keyframes para la animación del spinner */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @keyframes spin {
