@@ -35,10 +35,10 @@ const btnCargar = document.getElementById('btnCargar');
 const messageModal = document.getElementById('messageModal');
 const modalMessage = document.getElementById('modalMessage');
 const closeButton = document.querySelector('.close-button');
-let loadingOverlay;
+
 const tipoDeCambioGroup = document.getElementById('tipoDeCambioGroup');
 const tipoDeCambioInput = document.getElementById('tipoDeCambio');
-
+let loadingOverlay = document.getElementById('loadingOverlay'); // ¡Añade esta línea!
 
 const preReservaDateSelect = document.getElementById('preReservaDateSelect');
 const preReservasTableContainer = document.getElementById('preReservasTableContainer');
@@ -1161,7 +1161,7 @@ async function loadPreReservaIntoForm(idPreReserva) {
 // Al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
 
-    loadingOverlay = document.getElementById('loadingOverlay');
+   
     if (loadingOverlay) {
     loadingOverlay.classList.remove('show');
     loadingOverlay.style.pointerEvents = 'none';
@@ -1315,8 +1315,9 @@ btnCargar.addEventListener('click', async () => {
         formData.NRESERVA = response.newId; // Asegurar que el ticket tenga el N° de Reserva real
         generatePrintableTicket(formData);
         clearForm();
-        populatePreReservaDates(); // Recargar las fechas de pre-reservas para reflejar cambios de SITUACION
-        displayPreReservasTable(preReservaDateSelect.value); // Actualizar la tabla de pre-reservas
+         setTimeout(() => {
+                    location.reload(); // Esto recargará la página por completo
+                }, 1500);
     } else {
         showMessage(response.message, 'error');
     }
