@@ -118,6 +118,8 @@ function showLoadingOverlay(show) {
            
             if (show) {
                 loadingOverlay.classList.add('show');
+                loadingOverlay.style.display = 'flex'; // 🔒 fuerza ocultamiento
+
             } else {
                 loadingOverlay.classList.remove('show');
                loadingOverlay.style.display = 'none'; // 🔒 fuerza ocultamiento
