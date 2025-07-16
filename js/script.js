@@ -135,14 +135,9 @@ function showLoadingOverlay(show) {
     loadingOverlay.style.visibility = 'hidden';
     loadingOverlay.style.pointerEvents = 'none';
 
-    // 🔁 Y moverlo al fondo del stack visual (por si Chrome no lo renderiza bien)
-    loadingOverlay.style.zIndex = '-1';
-
-
-        // 🧠 Reflow forzado para limpiar capas flotantes
-    setTimeout(() => {
-      document.body.style.transform = 'scale(1)';
-    }, 0);
+                setTimeout(() => {
+  nombreCompletoInput.focus(); // 🔍 Forzar foco, detecta si el input está “bloqueado”
+}, 200);
 
 
 
@@ -739,6 +734,12 @@ function fillForm(data) {
         montoPagadoInput.style.backgroundColor = '#fcfcfc';
     }
     
+    setTimeout(() => {
+  nombreCompletoInput.blur();
+  nombreCompletoInput.focus();
+  nombreCompletoInput.style.pointerEvents = 'auto';
+  nombreCompletoInput.style.opacity = '1';
+}, 50);
     // Recalcular totales y luego la resta a pagar para asegurar consistencia
     calculateTotals(); 
 
