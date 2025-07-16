@@ -550,6 +550,9 @@ button:hover {
     visibility: hidden; /* Oculto completamente para no afectar interacciones */
      pointer-events: none;
     transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
+      
+  display: none; /* 🔴 esto es clave */
+
 }
 
 
@@ -557,6 +560,10 @@ button:hover {
 #loadingOverlay.show {
     opacity: 1; /* Hacerlo visible */
     visibility: visible; /* Mostrarlo */
+     display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 /* Opcional: Estilos para un spinner de carga dentro del overlay */
