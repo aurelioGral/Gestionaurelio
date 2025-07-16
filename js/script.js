@@ -139,6 +139,12 @@ function showLoadingOverlay(show) {
     loadingOverlay.style.zIndex = '-1';
 
 
+        // 🧠 Reflow forzado para limpiar capas flotantes
+    setTimeout(() => {
+      document.body.style.transform = 'scale(1)';
+    }, 0);
+
+
 
 
             }
