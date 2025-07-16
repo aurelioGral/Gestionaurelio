@@ -1,0 +1,809 @@
+/* General Body & Container */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f7; /* Light blue-grey background */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    
+    margin-top: 8px;
+    background-color:#fdf0d5;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1300px; /* Slightly wider for more content */
+    margin-bottom: 50px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+h1 {
+    text-align: center;
+    color: #003049; /* Darker blue-grey for headings */
+    margin-bottom: 35px;
+    font-size: 2.2em;
+    font-weight: 600;
+}
+
+h2 {
+    color: #780000;
+    margin-top: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.8em;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+}
+
+h3 {
+    grid-column: 1 / -1;
+    margin: 0 0 15px 0;
+    color: #669bbc; /* Bright blue for passenger titles */
+    border-bottom: 1px solid #aed6f1;
+    padding-bottom: 8px;
+    font-size: 1.2em;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed #c1121f;
+    margin: 30px 0;
+}
+
+/* Form Groups & Inputs */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px; /* Spacing between form groups */
+    position: relative;
+}
+
+label {
+    
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95em;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fcfcfc;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* --- Navbar Styles --- */
+.navbar {
+    width: 70%;
+    background-color: #003049; /* Fondo oscuro */
+    padding: 10px 0;
+    font-family: Arial, sans-serif;
+    position: sticky; /* Sticky navbar al hacer scroll */
+    top: 0;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    box-shadow: 0 2px 5px #fdf0d5; /* Sutil sombra */
+}
+
+.navbar-container {
+    max-width: 1200px; /* Ancho máximo del contenido del navbar */
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between; /* Espacio entre marca y enlaces */
+    align-items: center; /* Centrar verticalmente */
+    padding: 0 20px;
+}
+
+.navbar-brand {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Enlaces en línea */
+}
+
+.nav-links li {
+    position: relative; /* Para el dropdown */
+    margin-left: 25px; /* Espacio entre elementos del menú */
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    display: block; /* Para hacer click en toda el área del link */
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.nav-links a:hover{
+    background-color: #fdf0d5; /* Cambio de color al pasar el mouse o activo */
+    
+color: #003049; /* Color dorado para el texto activo/hover */
+    border-radius: 12px;
+}
+.nav-links a.active {
+    background-color: #780000; /* Cambio de color al pasar el mouse o activo */
+    color: #ffd700; /* Color dorado para el texto activo/hover */
+
+    border-radius: 12px;
+}
+
+/* Dropdown specific styles */
+.dropdown .dropbtn {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espacio entre texto y flecha */
+}
+
+.dropdown-content {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    background-color: #780000; /* Fondo del submenú */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    top: 100%; /* Colocar debajo del elemento padre */
+    left: 0;
+    padding: 5px 0;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #fdf0d5;
+    color:#003049 ;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block; /* Mostrar el submenú al pasar el mouse sobre "Clases" */
+}
+
+/* Menu Toggle for mobile (Hamburger icon) */
+.menu-toggle {
+    display: none; /* Oculto por defecto en desktop */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Mostrar en pantallas pequeñas */
+    }
+
+    .nav-links {
+        display: none; /* Ocultar enlaces por defecto */
+        flex-direction: column; /* Apilar enlaces verticalmente */
+        width: 100%;
+        position: absolute;
+        top: 60px; /* Debajo del navbar-container */
+        left: 0;
+        background-color: #333; /* Mismo fondo que el navbar */
+        border-top: 1px solid #555;
+        padding-bottom: 10px;
+    }
+
+    .nav-links.active {
+        display: flex; /* Mostrar cuando el menú esté activo */
+    }
+
+    .nav-links li {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links a {
+        padding: 12px 0;
+        border-bottom: 1px solid #444; /* Separador entre elementos */
+    }
+
+    .nav-links li:last-child a {
+        border-bottom: none;
+    }
+
+    .dropdown-content {
+        position: static; /* Dentro del flujo normal en móvil */
+        width: 100%;
+        box-shadow: none;
+        background-color: #555; /* Un tono más claro para el submenú en móvil */
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .dropdown-content a {
+        padding-left: 40px; /* Indentar elementos del submenú */
+        border-bottom: 1px solid #666;
+    }
+}
+
+/* Layout Sections */
+.section-top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* Special alignment for buttons next to inputs */
+.section-top .form-group:has(#btnBuscarReserva),
+.section-top .form-group:has(#btnBuscarPreReserva) {
+    display: flex;
+    flex-direction: row; /* Align label, input, button horizontally */
+    align-items: flex-end; /* Align items to the bottom */
+    gap: 10px; /* Space between input and button */
+    padding-top: 25px; /* Adjust for label at top */
+}
+.section-top .form-group:has(#btnBuscarReserva) label,
+.section-top .form-group:has(#btnBuscarPreReserva) label {
+    position: absolute; /* Position label above flex container */
+    top: 0;
+    left: 0;
+    margin-bottom: 0; /* Reset margin */
+}
+.section-top .form-group:has(#btnBuscarReserva) input,
+.section-top .form-group:has(#btnBuscarPreReserva) input {
+    flex-grow: 1; /* Input takes available space */
+}
+
+.section-pasajeros {
+    margin-bottom: 30px;
+}
+
+.pasajeros-grid {
+    display: grid;
+    gap: 25px;
+    grid-template-columns: 1fr; /* Single column layout for rows */
+}
+
+.pasajero-row {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #d4a373;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-bottom {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column for observations */
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.total-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+    margin-top: 20px;
+}
+
+/* Buttons */
+.button-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    min-width: 120px; /* Ensure buttons have minimum width */
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#btnBuscarPreReserva, #btnBuscarReserva { background-color: #669bbc; color: white; } /* Emerald green */
+#btnBuscarPreReserva:hover, #btnBuscarReserva:hover { background-color: #003049; }
+
+#btnGenerarTicket { background-color: #3498db; color: white; } /* Peter River blue */
+#btnGenerarTicket:hover { background-color: #2980b9; }
+
+#btnEliminar { background-color: #e74c3c; color: white; } /* Alizarin red */
+#btnEliminar:hover { background-color: #c0392b; }
+
+#btnActualizar { background-color: #f39c12; color: white; } /* Orange */
+#btnActualizar:hover { background-color: #e67e22; }
+
+#btnLimpiar { background-color: #95a5a6; color: white; } /* Asbestos grey */
+#btnLimpiar:hover { background-color: #7f8c8d; }
+
+#btnCargar { background-color: #588157; color: white; } /* Peter River blue (primary) */
+#btnCargar:hover { background-color: #386641; }
+
+
+.contenedorTodo{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items:flex-start;
+}
+/* Modal (Pop-up) Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    max-width: 500px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+    
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+#modalMessage {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 15px 0;
+}
+
+/* Modal specific colors */
+.modal-content.success {
+    border: 2px solid #2ecc71;
+    color: #27ae60;
+}
+.modal-content.error {
+    border: 2px solid #e74c3c;
+    color: #c0392b;
+}
+.modal-content.info {
+    border: 2px solid #3498db;
+    color: #2980b9;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .container {
+        padding: 25px;
+    }
+    .section-top {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+    .pasajero-row {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+    .button-actions {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 0.95em;
+        min-width: unset; /* Remove fixed min-width for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+    .section-top, .total-section, .pasajero-row {
+        grid-template-columns: 1fr;
+    }
+    .section-top .form-group:has(#btnBuscarReserva),
+    .section-top .form-group:has(#btnBuscarPreReserva) {
+        flex-direction: column; /* Stack input and button vertically */
+        align-items: stretch; /* Stretch items to full width */
+        padding-top: 0;
+    }
+    .section-top .form-group:has(#btnBuscarReserva) label,
+    .section-top .form-group:has(#btnBuscarPreReserva) label {
+        position: static; /* Reset position */
+        margin-bottom: 8px; /* Add margin back */
+    }
+    .button-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    .modal-content {
+        max-width: 90%;
+        padding: 20px;
+    }
+}
+
+/* Agrega esto a tu style.css */
+.dropdown-content.show-dropdown {
+    display: block; /* Muestra el dropdown cuando esta clase está presente */
+}
+
+/* Estilos para el Overlay de Carga */
+#loadingOverlay {
+    display: flex; /* Usar flexbox para centrar contenido */
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Posicionamiento fijo para cubrir toda la ventana */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente oscuro */
+    z-index: 9999; /* Asegura que esté por encima de todos los demás elementos */
+    opacity: 0; /* Inicialmente invisible */
+    visibility: hidden; /* Oculto completamente para no afectar interacciones */
+     pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
+      
+  display: none; /* 🔴 esto es clave */
+
+}
+
+
+/* Clase para mostrar el Overlay */
+#loadingOverlay.show {
+    opacity: 1; /* Hacerlo visible */
+    visibility: visible; /* Mostrarlo */
+     display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* Opcional: Estilos para un spinner de carga dentro del overlay */
+.spinner {
+    border: 8px solid #f3f3f3; /* Color claro del círculo exterior */
+    border-top: 8px solid #3498db; /* Color del borde superior (azul) */
+    border-radius: 50%; /* Forma circular */
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite; /* Animación de giro */
+}
+
+/* Keyframes para la animación del spinner */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ... (Tus estilos existentes) ... */
+
+/* --- Estilos para la Tabla de Pre-reservas --- */
+.container{
+    width: 80%;
+}
+.form-section{
+    margin: 8px;
+    width: auto;
+    padding: 8px;
+    background-color: #fdf0d5;
+    border-radius: 16px;
+}
+.table-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow-x: auto; /* Permite scroll horizontal en pantallas pequeñas */
+    background-color: #fff;
+    padding: 15px;
+}
+
+.pre-reservas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.pre-reservas-table th,
+.pre-reservas-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.pre-reservas-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+.pre-reservas-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.pre-reservas-table tr:hover {
+    background-color: #e9e9e9;
+}
+
+.pre-reservas-table .status-cobrado {
+    color: green;
+    font-weight: bold;
+}
+
+.pre-reservas-table .status-no-cobrado {
+    color: orange;
+    font-weight: bold;
+}
+
+.pre-reservas-table .status-cargada {
+    color: #007bff; /* Azul para "Cargada" */
+    font-weight: bold;
+}
+
+.pre-reservas-table button {
+    padding: 8px 12px;
+    background-color: #28a745; /* Botón verde para "Cargar" */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pre-reservas-table button:hover {
+    background-color: #218838;
+}
+
+.pre-reservas-table button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pre-reservas-table input[type="checkbox"] {
+    transform: scale(1.3); /* Hace el checkbox un poco más grande */
+    margin-right: 5px;
+}
+
+.contenedorcontadorypre{
+    height: auto;
+    width: auto;
+    padding: 8px;
+}
+
+/* Estilos para la nueva sección del Contador de Días */
+.day-counter-section {
+    width: auto;
+    height: auto;
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #fdf0d5; /* Mismo color de fondo que otros contenedores */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.day-counter-section h2 {
+    text-align: center;
+    color: #003049;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.day-counter-section .form-group {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 10px; /* Espacio entre elementos en una fila */
+
+}
+
+
+.day-counter-section label {
+    
+    
+    min-width: 120px; /* Mínimo para que no se compriman demasiado */
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 5px; /* Espacio debajo de la etiqueta en pantallas pequeñas */
+}
+
+.day-counter-section input[type="text"],
+.day-counter-section input[type="number"] {
+    flex-grow: 1; /* Permite que el input crezca */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    max-width: 250px; /* Limita el ancho máximo del input */
+}
+
+.day-counter-section button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0; /* Evita que el botón se comprima */
+}
+
+.day-counter-section button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.day-counter-section button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.day-counter-section .checkbox-group {
+    align-items: center;
+    margin-top: 20px;
+}
+
+.day-counter-section .checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.day-counter-section .message-display {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    min-height: 20px; /* Para mantener espacio incluso cuando está vacío */
+}
+
+.message-display.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-display.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .day-counter-section .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .day-counter-section label {
+        flex-basis: auto;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .day-counter-section input[type="text"],
+    .day-counter-section input[type="number"],
+    .day-counter-section button {
+        width: 100%;
+        max-width: none; /* Permitir que ocupe todo el ancho disponible */
+    }
+    .day-counter-section .checkbox-group {
+        flex-direction: row; /* Mantener en fila si es posible */
+        justify-content: flex-start;
+        align-items: center;
+    }
+}
