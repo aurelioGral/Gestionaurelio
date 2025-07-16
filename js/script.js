@@ -122,7 +122,16 @@ function showLoadingOverlay(show) {
 
             } else {
                 loadingOverlay.classList.remove('show');
-               loadingOverlay.style.display = 'none'; // 🔒 fuerza ocultamiento
+                 // 🔁 Forzar invisibilidad en todas capas
+    loadingOverlay.style.display = 'none';
+    loadingOverlay.style.opacity = '0';
+    loadingOverlay.style.visibility = 'hidden';
+    loadingOverlay.style.pointerEvents = 'none';
+
+    // 🔁 Y moverlo al fondo del stack visual (por si Chrome no lo renderiza bien)
+    loadingOverlay.style.zIndex = '-1';
+
+
 
 
             }
