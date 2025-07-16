@@ -548,8 +548,10 @@ button:hover {
     z-index: 9999; /* Asegura que esté por encima de todos los demás elementos */
     opacity: 0; /* Inicialmente invisible */
     visibility: hidden; /* Oculto completamente para no afectar interacciones */
+     pointer-events: none;
     transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
 }
+
 
 /* Clase para mostrar el Overlay */
 #loadingOverlay.show {

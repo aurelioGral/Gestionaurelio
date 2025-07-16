@@ -235,11 +235,11 @@ function generatePasajeroRows(count) {
             </div>
             <div class="form-group">
                 <label for="monto_alquiler_pax${i}">Valor Alquiler:</label>
-                <input type="number" id="monto_alquiler_pax${i}" min="0" value="0">
+                <input type="number" id="monto_alquiler_pax${i}" min="0" value="">
             </div>
             <div class="form-group">
                 <label for="monto_clase_pax${i}">Valor Clase:</label>
-                <input type="number" id="monto_clase_pax${i}" min="0" value="0">
+                <input type="number" id="monto_clase_pax${i}" min="0" value="">
             </div>
             `;
         pasajerosContainer.appendChild(row);
@@ -1243,11 +1243,22 @@ btnBuscarReserva.addEventListener('click', async () => {
     const response = await callAppsScript('getReservaDefinitiva', { nReserva: id });
     if (response.success) {
         fillForm(response.reserva);
+        // Forzar actualización de campos numéricos
+const r = response.reserva;
+document.getElementById("montoTotalFinal").value              = (r.MONTO_TOTAL_FINAL    || 0).toFixed(2);
+document.getElementById("montoPagadoInput").value            = (r.MONTO_PAGADO         || 0).toFixed(2);
+document.getElementById("montoPagadoPreRESERVAInput").value  = (r.MONTO_PAGADO_PRE_RESERVA || 0).toFixed(2);
+document.getElementById("restaPagarInput").value             = (r.RESTA_PAGAR          || 0).toFixed(2);
+
+
         showMessage('Reserva cargada para edición.', 'success');
         // Cuando cargas una reserva definitiva, no es una pre-reserva, 
         // así que limpia el campo de PRE_RESERVA_ID y el estado oculto.
         inputPreReservaId.value = ''; 
-        
+        // Limpiar visualmente el campo "Pago Adicional Hecho"
+document.getElementById('montoPagoHecho').value = '';
+
+
     } else {
         showMessage(response.message, 'error');
         clearForm();
@@ -1394,7 +1405,7 @@ if (montoPagadoPreRESERVAInput) {
 
 // Esta función ahora considera el nuevo input 'montoPagoHechoInput'
 function calculateRestaPagar() {
-    const montoTotalFinal = parseFloat(montoTotalFinalInput.value) || 0;
+    const montoTotalFinal = parseFloat(montoTotalFinalInput.value) || "";
     const montoPagadoPreReserva = parseFloat(montoPagadoPreRESERVAInput.value) || 0;
     const montoPagadoActualDisplay = parseFloat(montoPagadoInput.value) || 0; // Valor que se muestra en montoPagadoInput (suma de pagos anteriores de la definitiva)
     const montoPagoHecho = parseFloat(montoPagoHechoInput.value) || 0; // Nuevo pago adicional (solo si pagoHechoGroup está visible)
