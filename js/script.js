@@ -119,6 +119,13 @@ function showLoadingOverlay(show) {
             if (show) {
                 loadingOverlay.classList.add('show');
                 loadingOverlay.style.display = 'flex'; // 🔒 fuerza ocultamiento
+                
+    loadingOverlay.style.opacity = '1';
+    loadingOverlay.style.visibility = 'visible';
+    loadingOverlay.style.pointerEvents = 'all';
+    loadingOverlay.style.zIndex = '9999';           // Lo traemos al frente
+    
+
 
             } else {
                 loadingOverlay.classList.remove('show');
