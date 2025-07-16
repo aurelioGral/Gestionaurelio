@@ -120,7 +120,8 @@ function showLoadingOverlay(show) {
                 loadingOverlay.classList.add('show');
             } else {
                 loadingOverlay.classList.remove('show');
-                loadingOverlay.style.pointerEvents = 'none';
+               loadingOverlay.style.display = 'none'; // 🔒 fuerza ocultamiento
+
 
             }
         } else {
