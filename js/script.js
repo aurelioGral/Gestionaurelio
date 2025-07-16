@@ -120,6 +120,8 @@ function showLoadingOverlay(show) {
                 loadingOverlay.classList.add('show');
             } else {
                 loadingOverlay.classList.remove('show');
+                loadingOverlay.style.pointerEvents = 'none';
+
             }
         } else {
           
@@ -1134,6 +1136,12 @@ async function loadPreReservaIntoForm(idPreReserva) {
 document.addEventListener('DOMContentLoaded', () => {
 
     loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+    loadingOverlay.classList.remove('show');
+    loadingOverlay.style.pointerEvents = 'none';
+  }
+
+
     fechaInput.value = new Date().toLocaleDateString('es-AR');
     populatePreReservaDates();
 
