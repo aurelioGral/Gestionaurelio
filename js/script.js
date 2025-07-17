@@ -135,13 +135,14 @@ function showLoadingOverlay(show) {
     loadingOverlay.style.visibility = 'hidden';
     loadingOverlay.style.pointerEvents = 'none';
 
-                setTimeout(() => {
-  nombreCompletoInput.focus(); // 🔍 Forzar foco, detecta si el input está “bloqueado”
-}, 200);
+   // NUEVO: Forzar un reflow/repaint del navegador para "despertarlo"
+            loadingOverlay.offsetHeight; // Esto es clave con la pista de F12
 
+            loadingOverlay.style.display = 'none'; 
 
-
-
+            setTimeout(() => {
+                nombreCompletoInput.focus();
+            }, 200);
             }
         } else {
           
@@ -958,8 +959,9 @@ function generatePrintableTicket(data) {
             <style>
                 body {
                     font-family: 'Courier New', Courier, monospace;
-                    margin: 20mm; 
+                    margin: 0mm; 
                     font-size: 10pt;
+
                 }
                 .ticket {
                     width: 80mm;
@@ -977,8 +979,34 @@ function generatePrintableTicket(data) {
                 .pax-detail h4 { text-align: left; margin-bottom: 5px; color: #333; }
                 @media print {
                     .no-print { display: none; }
-                    body { margin: 0; } 
-                    .ticket { border: none; padding: 0; width: auto; }
+                     body {
+    width: 80mm; 
+    margin: 0;
+  }
+
+  .ticket {
+    border: none;
+    padding: 0;
+    width: 100%;
+    page-break-after: always;
+  }
+}
+
+@media screen {
+  body {
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+  }
+  .ticket {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+}
+
+
+
+
+
                 }
             </style>
         </head>
