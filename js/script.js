@@ -964,10 +964,10 @@ function generatePrintableTicket(data) {
 
                 }
                 .ticket {
-                    width: 80mm;
+                    width: 72mm;
                     margin: 0 auto 15mm auto; 
                     border: 1px dashed #ccc;
-                    padding: 10px;
+                    padding: 5px;
                     page-break-after: always; 
                 }
                 h2, h3, h4 { text-align: center; margin-bottom: 5px; }
@@ -980,13 +980,13 @@ function generatePrintableTicket(data) {
                 @media print {
                     .no-print { display: none; }
                      body {
-    width: 80mm; 
+    width: 72mm; 
     margin: 0;
   }
 
   .ticket {
     border: none;
-    padding: 0;
+    padding: 5px;
     width: 100%;
     page-break-after: always;
   }
