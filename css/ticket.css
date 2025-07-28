@@ -9,6 +9,7 @@ body {
     min-height: 100vh;
     margin: 20px 0; /* Margen superior e inferior */
     color: #333;
+    width: 72mm;
 }
 
 .ticket-container {
