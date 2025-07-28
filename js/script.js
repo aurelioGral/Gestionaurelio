@@ -964,7 +964,7 @@ function generatePrintableTicket(data) {
 
                 }
                 .ticket {
-                    width: 100%;
+                    width: 72mm;
                     margin: 0 auto 15mm auto; 
                     border: 1px dashed #ccc;
                     padding: 5px;
@@ -980,7 +980,7 @@ function generatePrintableTicket(data) {
                 @media print {
                     .no-print { display: none; }
                      body {
-    width: 100%; 
+    width: 72mm; 
     margin: 0;
   }
 
