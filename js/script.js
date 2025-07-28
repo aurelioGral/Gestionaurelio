@@ -960,7 +960,7 @@ function generatePrintableTicket(data) {
                 body {
                     font-family: 'Courier New', Courier, monospace;
                     margin: 0mm; 
-                    font-size: 10pt;
+                    font-size: 14pt;
 
                 }
                 .ticket {
@@ -1524,4 +1524,6 @@ function calculateRestaPagar() {
 
     // Finalmente, calcular y mostrar la resta a pagar
     restaPagarInput.value = (montoTotalFinal - totalPagadoAcumuladoFinal).toFixed(2);
+
+    
 }
